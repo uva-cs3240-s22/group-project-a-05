@@ -1,6 +1,8 @@
 from django.contrib import admin
 
 # Register your models here.
+# https://www.section.io/engineering-education/django-google-oauth/
+# 
 # Project name : django-oauth
 # Project ID   : django-oauth-343219
 # Client ID    : 780854667400-0npde56389ke82r5479vkc8if695lvdf.apps.googleusercontent.com
