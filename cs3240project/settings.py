@@ -86,6 +86,8 @@ WSGI_APPLICATION = 'cs3240project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+# Test heroku
+
 DATABASES = { 'default' : dj_database_url.config() }
 
 
