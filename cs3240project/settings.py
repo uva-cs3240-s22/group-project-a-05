@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 # https://www.section.io/engineering-education/django-google-oauth/
 
 import os
+import sys
 import django_heroku
 import dj_database_url
 
@@ -85,8 +86,16 @@ WSGI_APPLICATION = 'cs3240project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+if 'test' in sys.argv:
+    DATABASES = {
+        'default':{
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'mydatabase'
+        }
+    }
+else:
+    DATABASES = { 'default' : dj_database_url.config() }
 
-DATABASES = { 'default' : dj_database_url.config() }
 
 
 # Password validation
