@@ -86,7 +86,9 @@ WSGI_APPLICATION = 'cs3240project.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-DATABASES = { 'default' : dj_database_url.config() }
+
+# should be not needed because this exact thing is done in django-heroku.settings()
+# DATABASES = { 'default' : dj_database_url.config() }
 
 
 
