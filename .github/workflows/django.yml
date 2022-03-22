@@ -1,7 +1,7 @@
 name: Django CI
 
 env:
-  DATABASE_URL = ${{ secrets.DATABASE_URL }}
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
 
 on:
   push:
