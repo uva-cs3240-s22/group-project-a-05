@@ -5,3 +5,6 @@ from django.test import TestCase
 class DummyTest(TestCase):
     def testShouldWork(self):
         self.assertTrue(True)
+    
+    def testShouldFail(self):
+        self.assertTrue(False)
