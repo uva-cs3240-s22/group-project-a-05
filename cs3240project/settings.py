@@ -157,6 +157,6 @@ if 'test' in sys.argv:
     DATABASES = {
         'default':{
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': 'test_database'
+            'NAME': os.path.join(BASE_DIR, 'test_database.sqlite3'),
         }
     }
