@@ -14,6 +14,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 # https://www.section.io/engineering-education/django-google-oauth/
 
 import os
+import sys
 import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -152,3 +153,10 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 django_heroku.settings(locals())
+if 'test' in sys.argv:
+    DATABASES = {
+        'default':{
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'test_database'
+        }
+    }
