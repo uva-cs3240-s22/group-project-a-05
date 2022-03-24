@@ -83,14 +83,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'cs3240project.wsgi.application'
 
 
-# Database
-# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
-
-# should be not needed because this exact thing is done in django-heroku.settings()
-# DATABASES = { 'default' : dj_database_url.config() }
-
-
-
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
 
@@ -132,6 +124,11 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
+# allow username or email for login
+ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+
+# don't require email verification
+ACCOUNT_EMAIL_VERIFICATION = "none"
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
@@ -152,11 +149,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+# Database set in django_heroku.settings() from DATABASE_URL environment variable
+# https://docs.djangoproject.com/en/2.1/ref/settings/#databases
+
+DATABASES = {
+    'test': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR, 'test_database.sqlite3'),
+    }
+}
 django_heroku.settings(locals(), test_runner=False)
 if 'test' in sys.argv:
-    DATABASES = {
-        'default':{
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'test_database.sqlite3'),
-        }
-    }
+    DATABASES['default'] = DATABASES['test']
