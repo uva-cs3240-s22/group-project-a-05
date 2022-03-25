@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth import models as authmodels
 # Create your models here.
 
 class Recipe (models.Model):
@@ -8,5 +8,10 @@ class Recipe (models.Model):
     ingredient  = models.CharField(max_length=1000)
     time        = models.CharField(max_length=400)
     step        = models.CharField(max_length=2000)
-    def _str_(self):
+
+    user_like   = models.ManyToManyField(authmodels.User, related_name= "like_recipe")
+
+    def __str__(self):
         return self.name
+    
+
