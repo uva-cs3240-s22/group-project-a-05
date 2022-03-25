@@ -1,0 +1,13 @@
+{% extends 'app/base.html' %}
+{% load bootstrap5 %}
+
+{% block bootstrap5_title %}A-05 Project Index{% endblock bootstrap5_title %}
+{% block content %}<p>
+    
+    your login as {{ user }}, the recipe you liked 
+
+</p>
+{% for recipe in user.like_recipe.all %}
+    <li>{{recipe}}</li>
+{% endfor %}
+{% endblock content %}
