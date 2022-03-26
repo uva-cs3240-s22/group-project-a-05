@@ -4,9 +4,9 @@ from django.db import models
 
 class recipe (models.Model):
     name=models.CharField(max_length=400)
-    description=models.CharField(max_length=1000)
-    ingredient=models.CharField(max_length=1000)
+    description=models.TextField(null=True)
+    ingredients=models.TextField(null=True)
     time=models.CharField(max_length=400)
-    step=models.CharField(max_length=2000)
+    steps=models.TextField(null=True)
     def _str_(self):
         return self.name
