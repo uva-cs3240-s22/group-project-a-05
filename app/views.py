@@ -7,6 +7,6 @@ def index(request):
 def create_recipe(request):
     return render(request, 'app/create_recipe.html')
 
-def userprofile(request):
-    print(request.user.like_recipe.all())
+def profile(request):
+    print(request.user.liked_recipes.all())
     return render(request, 'app/userprofile.html')

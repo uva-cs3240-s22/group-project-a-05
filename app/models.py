@@ -5,13 +5,13 @@ from django.contrib.auth import models as authmodels
 class Recipe (models.Model):
     name        = models.CharField(max_length=400)
     description = models.CharField(max_length=1000)
-    ingredient  = models.CharField(max_length=1000)
+    ingredients = models.CharField(max_length=1000)
     time        = models.CharField(max_length=400)
-    step        = models.CharField(max_length=2000)
+    steps       = models.CharField(max_length=2000)
 
-    user_like   = models.ManyToManyField(authmodels.User, related_name= "like_recipe")
+    author      = models.ForeignKey(authmodels.User, on_delete=models.CASCADE, related_name="posted_recipes", null=True)
+    user_likes  = models.ManyToManyField(authmodels.User, related_name= "liked_recipes")
 
     def __str__(self):
         return self.name
-    
 
