@@ -1,5 +1,17 @@
 {% extends 'app/base.html' %}
 {% load bootstrap5 %}
 
-{% block bootstrap5_title %}A-05 Project Recipe Creation{% endblock bootstrap5_title %}
-{% block content %}<p>If you're reading this, create is set up</p>{% endblock content %}
+{% block boostrap5_title %}A-05 Project Recipe Creation{% endblock boostrap5_title %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input recipe_name="name" type="text" name="recipe_name" value="Recipe Name">
+    <input recipe_time="time" type="text" name="recipe_time" value="Time to Cook">
+    <input recipe_description="description" type="text" name="recipe_description" value="Brief Description of Recipe">
+    <input recipe_ingredients="ingredients" type="text" name="recipe_ingredients" value="Ingredients">
+    <input recipe_steps="steps" type="text" name="recipe_steps" value="Recipe Steps">
+    <input type="submit" value="Post">
+</form>
+{% endblock content %}
