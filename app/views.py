@@ -1,9 +1,9 @@
 from django.shortcuts import render
-from .models import recipe
+from .models import Recipe
 
 # Create your views here.
 def index(request):
-    return render(request, 'app/index.html')
+    return render(request, 'app/index.html', { 'recipes': Recipe.objects.all() })
 
 def create_recipe(request):
     try:
@@ -21,13 +21,16 @@ def create_recipe(request):
             return render(request, 'app/create_recipe.html', {
             'error_message': "You didn't enter a recipe",
         })
-        recipes=recipe(name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps)
+        recipes=Recipe(name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps)
         recipes.save()
     return render(request, 'app/create_recipe.html' )
 
 def recipe_list(request):
-    recipes=recipe.objects.all()
+    recipes=Recipe.objects.all()
     context={
         "Recipes" : recipes
     }
     return render(request, 'app/recipe_list.html', context)
+
+def profile(request):
+    return render(request, 'app/userprofile.html')
