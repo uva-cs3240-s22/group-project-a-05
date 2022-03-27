@@ -4,6 +4,21 @@
 {% block content %}
     <h2>{{ recipe.name }}</h2>
     <p>By: {{ recipe.author }}</p>
+
+    <!-- Want to change this to an implementation that doesn't require a redirect -->
+    <!-- I'm sure it's possible, just don't know how rn and this is good enough for now-->
+    <!-- Will probably wait until we change it to add like button to the list view-->
+    {% if user.is_authenticated %}
+        <form action="{% url 'app:detail' recipe.id %}" method='post'>
+            {% csrf_token %}
+            {% if recipe not in user.liked_recipes.all %}
+                <input type="submit" name="like" id="like" class='btn btn-success' value='Like'>
+            {% else %}
+                <input type="submit" name="unlike" id="unlike" class='btn btn-danger' value='Unlike'>
+            {% endif %}
+        </form>
+    {% endif %}
+
     <p>Time to cook: {{recipe.time }}</p>
 
     <h3>Ingredients</h3>

@@ -11,6 +11,12 @@ def recipe_list(request):
 
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
+
+    if 'like' in request.POST:
+        request.user.liked_recipes.add(recipe)
+    elif 'unlike' in request.POST:
+        request.user.liked_recipes.remove(recipe)
+    
     return render(request, 'app/detail.html', { 'recipe' : recipe })
 
 def create_recipe(request):
