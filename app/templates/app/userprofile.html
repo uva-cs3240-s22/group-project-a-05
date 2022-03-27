@@ -1,0 +1,30 @@
+{% extends 'app/base.html' %}
+{% load bootstrap5 %}
+
+{% block bootstrap5_title %}A-05 Project User Profile{% endblock bootstrap5_title %}
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>Welcome, {{ user }}</h1>
+
+        <h2>Your Posted Recipes:</h2>
+        {% if user.posted_recipes.all %}
+            {% for recipe in user.posted_recipes.all %}
+                <li><a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a></li>
+            {% endfor %}
+        {% else %}
+            <p>You haven't posted any recipes yet</p>
+        {% endif %}
+        <a href="{% url 'app:create_recipe'%}" class="btn btn-primary">Create a Recipe</a>
+
+        <h2>Your Liked Recipes:</h2>
+        {% if user.liked_recipes.all %}
+            {% for recipe in user.liked_recipes.all %}
+                <li><a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a></li>
+            {% endfor %}
+        {% else %}
+            <p>You haven't liked any recipes yet</p>
+        {% endif %}
+    {% else %}
+        <p>You're not signed in yet</p>
+    {% endif %}
+{% endblock content %}

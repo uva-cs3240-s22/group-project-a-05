@@ -1,0 +1,28 @@
+{% extends 'app/base.html' %}
+{% load bootstrap5 %}
+
+{% block boostrap5_title %}A-05 Project Recipe Creation{% endblock boostrap5_title %}
+
+{% block content %}
+<form action="" method="post">
+    {% csrf_token %}
+    <fieldset>
+        <label for='recipe_name' class='form-label'>Recipe Title:</label>
+        <input id='recipe_name' name="recipe_name" type='text' class='form-control'><br>
+
+        <label for='recipe_time' class='form-label'>Time to Cook:</label>
+        <input id='recipe_time' name="recipe_time" type='text' class='form-control'><br>
+    
+        <label for='recipe_description' class='form-label'>Recipe Description:</label>
+        <textarea id='recipe_description' name="recipe_description" class='form-control'></textarea><br>
+    
+        <label for='recipe_ingredients' class='form-label'>Recipe Ingredients:</label>
+        <textarea id='recipe_ingredients' name="recipe_ingredients" class='form-control'></textarea><br>
+    
+        <label for='recipe_steps' class='form-label'>Recipe Instructions:</label>
+        <textarea id='recipe_steps' name="recipe_steps" class='form-control'></textarea><br>
+        
+        <input type="submit" value="Post" class='btn btn-primary'>
+    </fieldset>
+</form>
+{% endblock content %}
