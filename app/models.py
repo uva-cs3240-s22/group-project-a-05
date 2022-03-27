@@ -9,7 +9,7 @@ class Recipe (models.Model):
     time        = models.CharField(max_length=400)
     steps       = models.CharField(max_length=2000)
 
-    author      = models.ForeignKey(authmodels.User, on_delete=models.CASCADE, related_name="posted_recipes", null=True)
+    author      = models.ForeignKey(authmodels.User, on_delete=models.CASCADE, related_name="posted_recipes")
     user_likes  = models.ManyToManyField(authmodels.User, related_name= "liked_recipes")
 
     def __str__(self):
