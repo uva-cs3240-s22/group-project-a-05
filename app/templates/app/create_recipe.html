@@ -6,12 +6,23 @@
 {% block content %}
 <form action="" method="post">
     {% csrf_token %}
-    {{ form }}
-    <input recipe_name="name" type="text" name="recipe_name" value="Recipe Name">
-    <input recipe_time="time" type="text" name="recipe_time" value="Time to Cook">
-    <input recipe_description="description" type="text" name="recipe_description" value="Brief Description of Recipe">
-    <input recipe_ingredients="ingredients" type="text" name="recipe_ingredients" value="Ingredients">
-    <input recipe_steps="steps" type="text" name="recipe_steps" value="Recipe Steps">
-    <input type="submit" value="Post">
+    <fieldset>
+        <label for='recipe_name' class='form-label'>Recipe Title:</label>
+        <input id='recipe_name' name="recipe_name" type='text' class='form-control'><br>
+
+        <label for='recipe_time' class='form-label'>Time to Cook:</label>
+        <input id='recipe_time' name="recipe_time" type='text' class='form-control'><br>
+    
+        <label for='recipe_description' class='form-label'>Recipe Description:</label>
+        <textarea id='recipe_description' name="recipe_description" class='form-control'></textarea><br>
+    
+        <label for='recipe_ingredients' class='form-label'>Recipe Ingredients:</label>
+        <textarea id='recipe_ingredients' name="recipe_ingredients" class='form-control'></textarea><br>
+    
+        <label for='recipe_steps' class='form-label'>Recipe Instructions:</label>
+        <textarea id='recipe_steps' name="recipe_steps" class='form-control'></textarea><br>
+        
+        <input type="submit" value="Post" class='btn btn-primary'>
+    </fieldset>
 </form>
 {% endblock content %}
