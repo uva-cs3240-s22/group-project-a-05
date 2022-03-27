@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Recipe
 
 # Create your views here.
@@ -8,6 +8,10 @@ def recipe_list(request):
         "Recipes" : recipes
     }
     return render(request, 'app/recipe_list.html', context)
+
+def detail(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    return render(request, 'app/detail.html', { 'recipe' : recipe })
 
 def create_recipe(request):
     try:

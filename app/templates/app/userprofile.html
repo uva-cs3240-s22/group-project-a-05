@@ -9,7 +9,7 @@
         <h2>Your Posted Recipes:</h2>
         {% if user.posted_recipes.all %}
             {% for recipe in user.posted_recipes.all %}
-                <li>{{ recipe }}</li>
+                <li><a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a></li>
             {% endfor %}
         {% else %}
             <p>You haven't posted any recipes yet</p>
@@ -19,7 +19,7 @@
         <h2>Your Liked Recipes:</h2>
         {% if user.liked_recipes.all %}
             {% for recipe in user.liked_recipes.all %}
-                <li>{{ recipe }}</li>
+                <li><a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a></li>
             {% endfor %}
         {% else %}
             <p>You haven't liked any recipes yet</p>

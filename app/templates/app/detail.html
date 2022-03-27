@@ -1,0 +1,17 @@
+{% extends 'app/base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+    <h2>{{ recipe.name }}</h2>
+    <p>By: {{ recipe.author }}</p>
+    <p>Time to cook: {{recipe.time }}</p>
+
+    <h3>Ingredients</h3>
+    <p>{{ recipe.ingredients }}</p>
+
+    <h3>Description</h3>
+    <p>{{ recipe.description }}</p>
+
+    <h3>Step-by-Step Instructions</h3>
+    <p>{{ recipe.steps }}</p>
+{% endblock content %}
