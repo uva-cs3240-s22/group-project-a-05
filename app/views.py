@@ -41,3 +41,7 @@ def create_recipe(request):
 
 def profile(request):
     return render(request, 'app/userprofile.html')
+
+def fork(request,recipe_id):
+    recipe=Recipe.objects.get(pk=recipe_id)
+    return render(request,'app/fork_recipe.html',{'recipe':recipe})
