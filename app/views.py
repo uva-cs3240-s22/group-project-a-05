@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 from .models import Recipe
 
 # Create your views here.
@@ -20,24 +22,26 @@ def detail(request, recipe_id):
     return render(request, 'app/detail.html', { 'recipe' : recipe })
 
 def create_recipe(request):
-    try:
-        recipename=request.POST.get("recipe_name")
-        recipetime=request.POST.get("recipe_time")
-        recipedescription=request.POST.get("recipe_description")
-        recipeingredients=request.POST.get("recipe_ingredients")
-        recipesteps=request.POST.get("recipe_steps")
-    except (KeyError):
-        return render(request, 'app/create_recipe.html', {
-            'error_message': "You didn't enter a recipe",
-        })
-    else:
-        if recipename==None and recipetime==None and recipedescription==None and recipeingredients==None and recipesteps==None:
-            return render(request, 'app/create_recipe.html', {
-            'error_message': "You didn't enter a recipe",
-        })
-        recipes=Recipe(name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps)
-        recipes.save()
     return render(request, 'app/create_recipe.html' )
+
+def submit_recipe(request):
+    if request.user.is_authenticated:
+        try:
+            recipename = request.POST.get("recipe_name")
+            recipetime = request.POST.get("recipe_time")
+            recipedescription = request.POST.get("recipe_description")
+            recipeingredients = request.POST.get("recipe_ingredients")
+            recipesteps = request.POST.get("recipe_steps")
+        except (KeyError):
+            return HttpResponseRedirect(reverse('app:create_recipe'))
+        else:
+            if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps):
+                return HttpResponseRedirect(reverse('app:create_recipe'))
+            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps)
+            recipes.save()
+            return HttpResponseRedirect(reverse('app:profile'))
+    else:
+        return HttpResponseRedirect(reverse('app:create_recipe'))
 
 def profile(request):
     return render(request, 'app/userprofile.html')
