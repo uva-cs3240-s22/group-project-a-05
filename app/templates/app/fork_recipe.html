@@ -4,8 +4,9 @@
 {% block boostrap5_title %}A-05 Project Recipe Creation{% endblock boostrap5_title %}
 
 {% block content %}
-<form action="" method="post">
-    {% csrf_token %}
+{% if user.is_authenticated %}
+        <form action="{% url 'app:submit_recipe' %}" method="post">
+            {% csrf_token %}
     <fieldset>
         <label for='recipe_name' class='form-label'>Recipe Title:</label>
         <input id='recipe_name' name="recipe_name" type='text' class='form-control' value="{{recipe.name}}"><br>
@@ -25,4 +26,7 @@
         <input type="submit" value="Post" class='btn btn-primary'>
     </fieldset>
 </form>
+{% else %}
+        <p>Please sign in first to fork a recipe</p>
+    {% endif %}
 {% endblock content %}

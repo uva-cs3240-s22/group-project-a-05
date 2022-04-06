@@ -48,7 +48,4 @@ def profile(request):
 
 def fork(request,recipe_id):
     recipe=Recipe.objects.get(pk=recipe_id)
-
-    
-
     return render(request,'app/fork_recipe.html',{'recipe':recipe})
