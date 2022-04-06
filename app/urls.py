@@ -8,4 +8,5 @@ urlpatterns = [
     path('submit', views.submit_recipe, name='submit_recipe'),
     path('profile', views.profile, name='profile'),
     path('detail/<int:recipe_id>', views.detail, name='detail'),
+     path('fork/<int:recipe_id>',views.fork,name='fork'),
 ]
