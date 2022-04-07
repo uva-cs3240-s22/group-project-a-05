@@ -5,7 +5,7 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-        <form action="{% url 'app:submit_fork'  %}" method="post">
+        <form action="{% url 'app:submit_fork' recipe.id %}" method="post">
             {% csrf_token %}
     <fieldset>
         <label for='recipe_name' class='form-label'>Recipe Title:</label>

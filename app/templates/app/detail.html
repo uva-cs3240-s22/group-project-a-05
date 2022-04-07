@@ -19,7 +19,13 @@
             <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a> <br>
         </form>
     {% endif %}
-
+    
+    {% if recipe.forked_from %}
+       <!--  <p>Forked: {{recipe.forked_from}}</p> -->
+        <a href = "../detail/{{recipe.forked_from}}" >Forked from </a>
+    {% endif %}
+    
+   
 
     <p>Time to cook: {{recipe.time }}</p>
 

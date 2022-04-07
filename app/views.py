@@ -50,7 +50,7 @@ def fork(request,recipe_id):
     recipe=Recipe.objects.get(pk=recipe_id)
     return render(request,'app/fork_recipe.html',{'recipe':recipe})
 
-def submit_fork(request):
+def submit_fork(request, recipe_id):
      if request.user.is_authenticated:
         try:
             recipename = request.POST.get("recipe_name")
@@ -63,7 +63,7 @@ def submit_fork(request):
         else:
             if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
-            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps)
+            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps, forked_from=recipe_id)
             recipes.save()
 
      if 'post_fork' in request.POST:

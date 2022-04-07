@@ -13,6 +13,8 @@ class Recipe (models.Model):
     user_likes  = models.ManyToManyField(authmodels.User, related_name="liked_recipes")
     user_forks = models.ManyToManyField(authmodels.User, related_name="forked_recipes")
 
+    forked_from = models.IntegerField(blank=True, null=True)
+
     def __str__(self):
         return self.name
 
