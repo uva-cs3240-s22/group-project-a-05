@@ -20,9 +20,9 @@
         </form>
     {% endif %}
     
-    {% if recipe.forked_from %}
+    {% if recipe.forked_from_id %}
        <!--  <p>Forked: {{recipe.forked_from}}</p> -->
-        <a href = "../detail/{{recipe.forked_from}}" >Forked from </a>
+        Forked from: <a href = "../detail/{{recipe.forked_from_id}}" >{{recipe.forked_from_name}} </a>
     {% endif %}
     
    
