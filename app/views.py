@@ -70,4 +70,9 @@ def submit_fork(request, recipe_id):
      if 'post_fork' in request.POST:
         request.user.forked_recipes.add(recipes)
 
-     return render(request, 'app/index.html')
+     recipes_all=Recipe.objects.all()
+     context={
+        "Recipes" : recipes_all
+     }
+
+     return render(request, 'app/recipe_list.html', context)
