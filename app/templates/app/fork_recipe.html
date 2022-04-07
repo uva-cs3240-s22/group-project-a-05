@@ -5,7 +5,7 @@
 
 {% block content %}
 {% if user.is_authenticated %}
-        <form action="{% url 'app:submit_recipe' %}" method="post">
+        <form action="{% url 'app:submit_fork'  %}" method="post">
             {% csrf_token %}
     <fieldset>
         <label for='recipe_name' class='form-label'>Recipe Title:</label>
@@ -23,7 +23,7 @@
         <label for='recipe_steps' class='form-label'>Recipe Instructions:</label>
         <input id='recipe_steps' name="recipe_steps" class='form-control'value="{{recipe.steps}}"><br>
         
-        <input type="submit" value="Post" class='btn btn-primary'>
+        <input type="submit" name="post_fork" id="post_fork" value="Post" class='btn btn-primary'>
     </fieldset>
 </form>
 {% else %}
