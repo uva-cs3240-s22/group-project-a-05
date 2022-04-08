@@ -38,6 +38,8 @@
     <h3>Step-by-Step Instructions</h3>
     <p>{{ recipe.steps }}</p>
 
-    <h3>Images</h3>
-    <img src= " {{ recipe.image.url }} " width="200px" height = "200px" >
+    {% if recipe.image %}
+        <h3>Images</h3>
+        <img src= " {{ recipe.image.url }} " width="200px" height = "200px" >
+    {% endif %}
 {% endblock content %}
