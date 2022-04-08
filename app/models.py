@@ -9,7 +9,7 @@ class Recipe (models.Model):
     ingredients = models.CharField(max_length=1000)
     time        = models.CharField(max_length=400)
     steps       = models.CharField(max_length=2000)
-    image       = models.FileField(upload_to='recipe_picture/')
+    image       = models.FileField(upload_to='recipe_picture/', null=True)
 
     author      = models.ForeignKey(authmodels.User, on_delete=models.CASCADE, related_name="posted_recipes")
     user_likes  = models.ManyToManyField(authmodels.User, related_name="liked_recipes")
