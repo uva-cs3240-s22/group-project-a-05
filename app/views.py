@@ -45,3 +45,34 @@ def submit_recipe(request):
 
 def profile(request):
     return render(request, 'app/userprofile.html')
+
+def fork(request,recipe_id):
+    recipe=Recipe.objects.get(pk=recipe_id)
+    return render(request,'app/fork_recipe.html',{'recipe':recipe})
+
+def submit_fork(request, recipe_id):
+     old_recipe=Recipe.objects.get(pk=recipe_id)
+     if request.user.is_authenticated:
+        try:
+            recipename = request.POST.get("recipe_name")
+            recipetime = request.POST.get("recipe_time")
+            recipedescription = request.POST.get("recipe_description")
+            recipeingredients = request.POST.get("recipe_ingredients")
+            recipesteps = request.POST.get("recipe_steps")
+        except (KeyError):
+            return HttpResponseRedirect(reverse('app:create_recipe'))
+        else:
+            if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps):
+                return HttpResponseRedirect(reverse('app:create_recipe'))
+            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps, forked_from_id=recipe_id, forked_from_name=old_recipe.name)
+            recipes.save()
+
+     if 'post_fork' in request.POST:
+        request.user.forked_recipes.add(recipes)
+
+     recipes_all=Recipe.objects.all()
+     context={
+        "Recipes" : recipes_all
+     }
+
+     return render(request, 'app/recipe_list.html', context)
