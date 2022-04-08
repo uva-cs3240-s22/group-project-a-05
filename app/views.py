@@ -32,13 +32,17 @@ def submit_recipe(request):
             recipedescription = request.POST.get("recipe_description")
             recipeingredients = request.POST.get("recipe_ingredients")
             recipesteps = request.POST.get("recipe_steps")
+            recipeimage=request.FILES.get("recipe_image")
+            #print(request.POST)
+            #print(request.FILES)
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
-            if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps):
+            if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps and recipeimage):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
-            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps)
+            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps, image=recipeimage)
             recipes.save()
+
             return HttpResponseRedirect(reverse('app:profile'))
     else:
         return HttpResponseRedirect(reverse('app:create_recipe'))
