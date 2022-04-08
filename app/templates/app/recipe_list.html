@@ -1,6 +1,7 @@
 {% extends 'app/base.html' %}
 {% load bootstrap5 %}
 
+{% block bootstrap5_title %}A-05 Project Recipe List{% endblock bootstrap5_title %}
 {% block content %}
     <ul class="list-group">
         {% for recipe in Recipes %}

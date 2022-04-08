@@ -1,6 +1,7 @@
 {% extends 'app/base.html' %}
 {% load bootstrap5 %}
 
+{% block bootstrap5_title %}A-05 Project Recipe Detail{% endblock bootstrap5_title %}
 {% block content %}
     <h2>{{ recipe.name }}</h2>
     <p>By: {{ recipe.author }}</p>
