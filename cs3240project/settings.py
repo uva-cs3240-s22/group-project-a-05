@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -152,6 +153,7 @@ STATIC_URL = '/static/'
 # Database set in django_heroku.settings() from DATABASE_URL environment variable
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+
 DATABASES = {
     'test': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -161,3 +163,13 @@ DATABASES = {
 django_heroku.settings(locals(), test_runner=False)
 if 'test' in sys.argv:
     DATABASES['default'] = DATABASES['test']
+
+
+AWS_ACCESS_KEY_ID = 'AKIAQF7DF6AMVJQRWE7O'
+AWS_SECRET_ACCESS_KEY = '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'
+AWS_STORAGE_BUCKET_NAME = 'word-of-mouth-a5'
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+#STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_QUERYSTRING_AUTH = False 
+AWS_S3_FILE_OVERWRITE = None

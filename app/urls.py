@@ -8,6 +8,6 @@ urlpatterns = [
     path('submit', views.submit_recipe, name='submit_recipe'),
     path('profile', views.profile, name='profile'),
     path('detail/<int:recipe_id>', views.detail, name='detail'),
-     path('fork/<int:recipe_id>',views.fork,name='fork'),
-     path('submit_fork/<int:recipe_id>', views.submit_fork, name="submit_fork" )
+    path('fork/<int:recipe_id>',views.fork,name='fork'),
+    path('submit_fork/<int:recipe_id>', views.submit_fork, name="submit_fork" )
 ]
