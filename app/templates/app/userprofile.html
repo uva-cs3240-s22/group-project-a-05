@@ -24,7 +24,20 @@
         {% else %}
             <p>You haven't liked any recipes yet</p>
         {% endif %}
+
+        <h2>Your Forked Recipes:</h2>
+        {% if user.forked_recipes.all %}
+            {% for recipe in user.forked_recipes.all %}
+                <li><a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a></li>
+            {% endfor %}
+        {% else %}
+            <p>You haven't forked any recipes yet</p>
+        {% endif %}
+
     {% else %}
         <p>You're not signed in yet</p>
     {% endif %}
+
+    
+
 {% endblock content %}

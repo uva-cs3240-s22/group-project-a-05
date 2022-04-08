@@ -4,25 +4,29 @@
 {% block boostrap5_title %}A-05 Project Recipe Creation{% endblock boostrap5_title %}
 
 {% block content %}
-<form action="" method="post">
-    {% csrf_token %}
-    <fieldset>
-        <label for='recipe_name' class='form-label'>Recipe Title:</label>
-        <input id='recipe_name' name="recipe_name" type='text' class='form-control' value="{{recipe.name}}"><br>
+{% if user.is_authenticated %}
+    <form action="{% url 'app:submit_fork' recipe.id %}" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <label for='recipe_name' class='form-label'>Recipe Title:</label>
+            <input id='recipe_name' name="recipe_name" type='text' class='form-control' value="{{recipe.name}}"><br>
 
-        <label for='recipe_time' class='form-label'>Time to Cook:</label>
-        <input id='recipe_time' name="recipe_time" type='text' class='form-control'value="{{recipe.time}}"><br>
-    
-        <label for='recipe_description' class='form-label'>Recipe Description:</label>
-        <input id='recipe_description' name="recipe_description" class='form-control'value="{{recipe.description}}"><br>
-    
-        <label for='recipe_ingredients' class='form-label'>Recipe Ingredients:</label>
-        <input id='recipe_ingredients' name="recipe_ingredients" class='form-control'value="{{recipe.ingredients}}"><br>
-    
-        <label for='recipe_steps' class='form-label'>Recipe Instructions:</label>
-        <input id='recipe_steps' name="recipe_steps" class='form-control'value="{{recipe.steps}}"><br>
+            <label for='recipe_time' class='form-label'>Time to Cook:</label>
+            <input id='recipe_time' name="recipe_time" type='text' class='form-control'value="{{recipe.time}}"><br>
         
-        <input type="submit" value="Post" class='btn btn-primary'>
-    </fieldset>
-</form>
+            <label for='recipe_description' class='form-label'>Recipe Description:</label>
+            <input id='recipe_description' name="recipe_description" class='form-control'value="{{recipe.description}}"><br>
+        
+            <label for='recipe_ingredients' class='form-label'>Recipe Ingredients:</label>
+            <input id='recipe_ingredients' name="recipe_ingredients" class='form-control'value="{{recipe.ingredients}}"><br>
+        
+            <label for='recipe_steps' class='form-label'>Recipe Instructions:</label>
+            <input id='recipe_steps' name="recipe_steps" class='form-control'value="{{recipe.steps}}"><br>
+            
+            <input type="submit" name="post_fork" id="post_fork" value="Post" class='btn btn-primary'>
+        </fieldset>
+    </form>
+    {% else %}
+        <p>Please sign in first to fork a recipe</p>
+    {% endif %}
 {% endblock content %}
