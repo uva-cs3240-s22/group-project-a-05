@@ -9,6 +9,8 @@ django-heroku = "*"
 django-bootstrap-v5 = "*"
 django-allauth = "*"
 gunicorn = "*"
+django-storages = "*"
+boto3 = "*"
 
 [dev-packages]
 
