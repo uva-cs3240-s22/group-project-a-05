@@ -38,7 +38,8 @@ def submit_recipe(request):
         else:
             if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps and recipeimage):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
-            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps, image=recipeimage)
+            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients,
+                            time=recipetime, steps=recipesteps, image=recipeimage)
             recipes.save()
 
             return HttpResponseRedirect(reverse('app:profile'))
@@ -46,7 +47,9 @@ def submit_recipe(request):
         return HttpResponseRedirect(reverse('app:create_recipe'))
 
 def profile(request):
-    return render(request, 'app/userprofile.html')
+    posted_recipes = request.user.posted_recipes.filter(forked_from=None)
+    forked_recipes = request.user.posted_recipes.exclude(forked_from=None)
+    return render(request, 'app/userprofile.html', { 'posted_recipes': posted_recipes, 'forked_recipes':forked_recipes })
 
 def fork(request,recipe_id):
     recipe=Recipe.objects.get(pk=recipe_id)
@@ -66,7 +69,8 @@ def submit_fork(request, recipe_id):
         else:
             if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
-            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps, forked_from_id=recipe_id, forked_from_name=parent_recipe.name)
+            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients,
+                            time=recipetime, steps=recipesteps, forked_from=parent_recipe)
             recipes.save()
 
         # if 'post_fork' in request.POST:
