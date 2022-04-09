@@ -23,8 +23,8 @@
                 <label for='recipe_steps' class='form-label'>Recipe Instructions:</label>
                 <textarea id='recipe_steps' name="recipe_steps" class='form-control' required>{{ recipe.steps }}</textarea><br>
 
-                {% comment %} <label for='recipe_image'> Choose Picture: </label>
-                <input type="file" id='recipe_image' name="recipe_image" accept=".jpg, .jpeg, .png" value="{{ recipe.image }}">  {% endcomment %}
+                <label for='recipe_image'> Choose Picture (optional): </label>
+                <input type="file" id='recipe_image' name="recipe_image" accept=".jpg, .jpeg, .png">
                 
                 <input type="submit" name="post_fork" id="post_fork" value="Post" class='btn btn-primary'>
             </fieldset>

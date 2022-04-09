@@ -64,17 +64,16 @@ def submit_fork(request, recipe_id):
             recipedescription   = request.POST.get("recipe_description")
             recipeingredients   = request.POST.get("recipe_ingredients")
             recipesteps         = request.POST.get("recipe_steps")
+            recipeimage         = request.FILES.get("recipe_image")
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
             if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
             recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients,
-                            time=recipetime, steps=recipesteps, forked_from=parent_recipe)
+                            time=recipetime, steps=recipesteps, image=recipeimage, forked_from=parent_recipe)
             recipes.save()
 
-        # if 'post_fork' in request.POST:
-        #     request.user.forked_recipes.add(recipes)
         return HttpResponseRedirect(reverse('app:profile'))
 
     else:
