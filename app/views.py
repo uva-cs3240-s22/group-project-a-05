@@ -27,20 +27,19 @@ def create_recipe(request):
 def submit_recipe(request):
     if request.user.is_authenticated:
         try:
-            recipename = request.POST.get("recipe_name")
-            recipetime = request.POST.get("recipe_time")
-            recipedescription = request.POST.get("recipe_description")
-            recipeingredients = request.POST.get("recipe_ingredients")
-            recipesteps = request.POST.get("recipe_steps")
-            recipeimage=request.FILES.get("recipe_image")
-            #print(request.POST)
-            #print(request.FILES)
+            recipename          = request.POST.get("recipe_name")
+            recipetime          = request.POST.get("recipe_time")
+            recipedescription   = request.POST.get("recipe_description")
+            recipeingredients   = request.POST.get("recipe_ingredients")
+            recipesteps         = request.POST.get("recipe_steps")
+            recipeimage         = request.FILES.get("recipe_image")
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
             if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps and recipeimage):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
-            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps, image=recipeimage)
+            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients,
+                            time=recipetime, steps=recipesteps, image=recipeimage)
             recipes.save()
 
             return HttpResponseRedirect(reverse('app:profile'))
@@ -48,35 +47,34 @@ def submit_recipe(request):
         return HttpResponseRedirect(reverse('app:create_recipe'))
 
 def profile(request):
-    return render(request, 'app/userprofile.html')
+    posted_recipes = request.user.posted_recipes.filter(forked_from=None)
+    forked_recipes = request.user.posted_recipes.exclude(forked_from=None)
+    return render(request, 'app/userprofile.html', { 'posted_recipes': posted_recipes, 'forked_recipes':forked_recipes })
 
 def fork(request,recipe_id):
     recipe=Recipe.objects.get(pk=recipe_id)
-    return render(request,'app/fork_recipe.html',{'recipe':recipe})
+    return render(request,'app/fork_recipe.html', {'recipe': recipe})
 
 def submit_fork(request, recipe_id):
-     old_recipe=Recipe.objects.get(pk=recipe_id)
-     if request.user.is_authenticated:
+    parent_recipe = Recipe.objects.get(pk=recipe_id)
+    if request.user.is_authenticated:
         try:
-            recipename = request.POST.get("recipe_name")
-            recipetime = request.POST.get("recipe_time")
-            recipedescription = request.POST.get("recipe_description")
-            recipeingredients = request.POST.get("recipe_ingredients")
-            recipesteps = request.POST.get("recipe_steps")
+            recipename          = request.POST.get("recipe_name")
+            recipetime          = request.POST.get("recipe_time")
+            recipedescription   = request.POST.get("recipe_description")
+            recipeingredients   = request.POST.get("recipe_ingredients")
+            recipesteps         = request.POST.get("recipe_steps")
+            recipeimage         = request.FILES.get("recipe_image")
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
             if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
-            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients, time=recipetime, steps=recipesteps, forked_from_id=recipe_id, forked_from_name=old_recipe.name)
+            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients,
+                            time=recipetime, steps=recipesteps, image=recipeimage, forked_from=parent_recipe)
             recipes.save()
 
-     if 'post_fork' in request.POST:
-        request.user.forked_recipes.add(recipes)
+        return HttpResponseRedirect(reverse('app:profile'))
 
-     recipes_all=Recipe.objects.all()
-     context={
-        "Recipes" : recipes_all
-     }
-
-     return render(request, 'app/recipe_list.html', context)
+    else:
+        return HttpResponseRedirect(reverse('app:fork', kwargs={'recipe_id': recipe_id}))

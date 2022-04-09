@@ -4,7 +4,12 @@
 {% block bootstrap5_title %}A-05 Project Recipe Detail{% endblock bootstrap5_title %}
 {% block content %}
     <h2>{{ recipe.name }}</h2>
-    <p>By: {{ recipe.author }}</p>
+    <p>
+        By: {{ recipe.author }}<br>
+        {% if recipe.forked_from %}
+            Forked from: <a href = "/detail/{{recipe.forked_from.id}}" >{{recipe.forked_from.name}} </a>
+        {% endif %}
+    </p>
 
     <!-- Want to change this to an implementation that doesn't require a redirect -->
     <!-- I'm sure it's possible, just don't know how rn and this is good enough for now-->
@@ -20,13 +25,6 @@
             <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a> <br>
         </form>
     {% endif %}
-    
-    {% if recipe.forked_from_id %}
-       <!--  <p>Forked: {{recipe.forked_from}}</p> -->
-        Forked from: <a href = "../detail/{{recipe.forked_from_id}}" >{{recipe.forked_from_name}} </a>
-    {% endif %}
-    
-   
 
     <p>Time to cook: {{recipe.time }}</p>
 
