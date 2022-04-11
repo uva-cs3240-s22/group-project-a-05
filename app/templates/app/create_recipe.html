@@ -17,9 +17,18 @@
                 <label for='recipe_description' class='form-label'>Recipe Description:</label>
                 <textarea id='recipe_description' name="recipe_description" class='form-control' required></textarea><br>
             
-                <label for='recipe_ingredients' class='form-label'>Recipe Ingredients:</label>
-                <textarea id='recipe_ingredients' name="recipe_ingredients" class='form-control' required></textarea><br>
-            
+                <!-- <label for='recipe_ingredients' class='form-label'>Recipe Ingredients:</label>
+                <textarea id='recipe_ingredients' name="recipe_ingredients" class='form-control' required></textarea><br> -->
+                    
+                {% for ingredient in Ingredients %}
+                    <li class="list-group-item">
+                    <b>Name: </b>{{ ingredient.name }} <br>
+                    <b>Amount: </b>{{ ingredient.amount }} <br>
+                    <b>Unit: </b>{{ ingredient.unit }} <br>
+                    </li>
+                <br/>
+                {% endfor %}
+
                 <label for='recipe_steps' class='form-label'>Recipe Instructions:</label>
                 <textarea id='recipe_steps' name="recipe_steps" class='form-control' required></textarea><br>
 
