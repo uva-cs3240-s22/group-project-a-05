@@ -98,7 +98,7 @@ def submit_comment(request, recipe_id):
             comments.save()
             recipe.comments.add(comments)
 
-        return HttpResponseRedirect(reverse('app:profile'))
+        return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
 
     else:
         return HttpResponseRedirect(reverse('app:comment', kwargs={'recipe_id': recipe_id}))
