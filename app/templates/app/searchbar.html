@@ -14,7 +14,8 @@
           - <b>Ingredients: </b>{{ recipe.ingredients }} <br>
           - <b>Steps: </b>{{ recipe.steps }} <br>
           - {% if recipe.image %} 
-            <b>Photo: </b> <b><img src= " {{ recipe.image.url }} " width="200px" height = "200px" ><br>
+            <b>Photo: </b> 
+            <b><img src= " {{ recipe.image.url }} " width="200px" height = "200px" ><br>
             {% endif %}
        {% endfor %}
        {% else %}
