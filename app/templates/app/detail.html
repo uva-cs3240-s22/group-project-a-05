@@ -44,5 +44,9 @@
     {% endif %}
 
     <h3>Comments</h3>
-    {{ recipe.comments.all|join:", " }}
+    {% for comment in recipe.comments.all %}
+    <p><strong>{{comment.author}}: </strong>{{ comment }} </p>
+    {% endfor %}
+    
+
 {% endblock content %}
