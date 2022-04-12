@@ -1,7 +1,7 @@
-{% extends 'bootstrap5/bootstrap5.html' %}
+{% extends 'app/base.html' %}
 {% load bootstrap5 %}
-
-{% block bootstrap5_content %}
+{% block boostrap5_title %}A-05 Project Recipe Creation{% endblock boostrap5_title %}
+{% block content %}
    <center>  
     {% if searched %}
        <h1> You search for {{searched}} </h1>
@@ -9,8 +9,7 @@
        {% if recipes%}
        {% for recipe in recipes %}
           <a href="{% url 'app:detail' recipe.id %}">{{ recipe }} </a> <br>
-          - {% if recipe.image %} 
-            <b>Photo: </b> 
+           {% if recipe.image %} 
             <b><img src= " {{ recipe.image.url }} " width="200px" height = "200px" ><br>
             {% endif %}
        {% endfor %}
@@ -21,4 +20,4 @@
        <h1> Sorry, you may forget to search a valid recipe </h1>
     {% endif %}
    </center>     
-{% endblock bootstrap5_content %}
+{% endblock content %}
