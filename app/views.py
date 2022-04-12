@@ -1,3 +1,4 @@
+from unicodedata import name
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponseRedirect
@@ -10,6 +11,14 @@ def recipe_list(request):
         "Recipes" : recipes
     }
     return render(request, 'app/recipe_list.html', context)
+
+def searchbar(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        recipes = Recipe.objects.filter(name__contains = searched)
+        return render(request, 'app/searchbar.html', {'searched':searched, 'recipes': recipes})
+    else:
+        return render(request, 'app/searchbar.html', {})
 
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)

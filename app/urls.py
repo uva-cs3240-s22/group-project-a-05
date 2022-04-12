@@ -10,4 +10,5 @@ urlpatterns = [
     path('detail/<int:recipe_id>',      views.detail,           name='detail'),
     path('fork/<int:recipe_id>',        views.fork,             name='fork'),
     path('submit_fork/<int:recipe_id>', views.submit_fork,      name='submit_fork'),
+    path('searchbar',                   views.searchbar,        name='searchbar'),
 ]
