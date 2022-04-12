@@ -23,7 +23,7 @@
                 <input type="submit" name="unlike" id="unlike" class='btn btn-danger' value='Unlike'>
             {% endif %}
             <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a> 
-            <a href="../comment" class="btn btn-warning"> Comment</a> <br>
+            <a href="../comment/{{recipe.id}}" class="btn btn-warning"> Comment</a> <br>
         </form>
     {% endif %}
 
@@ -42,4 +42,7 @@
         <h3>Images</h3>
         <img src= " {{ recipe.image.url }} " width="200px" height = "200px" >
     {% endif %}
+
+    <h3>Comments</h3>
+    {{ recipe.comments.all|join:", " }}
 {% endblock content %}

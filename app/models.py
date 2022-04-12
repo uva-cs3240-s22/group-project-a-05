@@ -21,8 +21,8 @@ class Recipe (models.Model):
     author      = models.ForeignKey(authmodels.User, on_delete=models.CASCADE, related_name="posted_recipes")
     forked_from = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, related_name="child_recipes")
     user_likes  = models.ManyToManyField(authmodels.User, related_name="liked_recipes")
-    
-    comments=models.ManyToManyField(Comment, related_name="recipe_comments" )
+
+    comments=models.ManyToManyField(Comment, blank=True, related_name="recipe_comments" )
 
     def __str__(self):
         return self.name
