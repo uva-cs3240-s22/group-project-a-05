@@ -78,3 +78,7 @@ def submit_fork(request, recipe_id):
 
     else:
         return HttpResponseRedirect(reverse('app:fork', kwargs={'recipe_id': recipe_id}))
+
+def comment(request):
+
+    return render(request, "app/create_comment.html")
