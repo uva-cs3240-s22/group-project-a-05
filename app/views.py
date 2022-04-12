@@ -36,7 +36,7 @@ def submit_recipe(request):
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
-            if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps and recipeimage):
+            if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
             recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients,
                             time=recipetime, steps=recipesteps, image=recipeimage)
