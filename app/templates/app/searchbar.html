@@ -9,10 +9,6 @@
        {% if recipes%}
        {% for recipe in recipes %}
           <a href="{% url 'app:detail' recipe.id %}">{{ recipe }} </a> <br>
-          - <b>Time to Cook: </b>{{ recipe.time }} <br>
-          - <b>Recipe Description: </b>{{ recipe.description }} <br> 
-          - <b>Ingredients: </b>{{ recipe.ingredients }} <br>
-          - <b>Steps: </b>{{ recipe.steps }} <br>
           - {% if recipe.image %} 
             <b>Photo: </b> 
             <b><img src= " {{ recipe.image.url }} " width="200px" height = "200px" ><br>
