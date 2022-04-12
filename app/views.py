@@ -2,7 +2,10 @@ from unicodedata import name
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from .models import Recipe
+from .models import Recipe, Comment
+from django.db.models import Q,CharField
+from django.db.models.functions import Lower
+CharField.register_lookup(Lower, "lower")
 
 # Create your views here.
 def recipe_list(request):
@@ -14,8 +17,8 @@ def recipe_list(request):
 
 def searchbar(request):
     if request.method == "POST":
-        searched = request.POST['searched']
-        recipes = Recipe.objects.filter(name__contains = searched)
+        searched = request.POST['searched'].lower()
+        recipes = Recipe.objects.filter(Q(name__lower__contains = searched))
         return render(request, 'app/searchbar.html', {'searched':searched, 'recipes': recipes})
     else:
         return render(request, 'app/searchbar.html', {})
@@ -87,3 +90,29 @@ def submit_fork(request, recipe_id):
 
     else:
         return HttpResponseRedirect(reverse('app:fork', kwargs={'recipe_id': recipe_id}))
+
+def comment(request, recipe_id):
+    recipe=Recipe.objects.get(pk=recipe_id)
+    return render(request, "app/create_comment.html", {'recipe': recipe})
+
+def submit_comment(request, recipe_id):
+    recipe=Recipe.objects.get(pk=recipe_id)
+
+    if request.user.is_authenticated:
+        try:
+            commenttext          = request.POST.get("comment")
+        except (KeyError):
+            return HttpResponseRedirect(reverse('app:profile'))
+        else:
+            if not(commenttext):
+                return HttpResponseRedirect(reverse('app:profile'))
+            comments=Comment(author=request.user, comment_text=commenttext)
+            comments.save()
+            recipe.comments.add(comments)
+
+        return HttpResponseRedirect(reverse('app:profile'))
+
+    else:
+        return HttpResponseRedirect(reverse('app:comment', kwargs={'recipe_id': recipe_id}))
+
+    
