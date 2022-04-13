@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from .models import Recipe
+import json
 
 # Create your views here.
 def recipe_list(request):
@@ -13,13 +14,23 @@ def recipe_list(request):
 
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
-
-    if 'like' in request.POST:
-        request.user.liked_recipes.add(recipe)
-    elif 'unlike' in request.POST:
-        request.user.liked_recipes.remove(recipe)
-    
     return render(request, 'app/detail.html', { 'recipe' : recipe })
+
+def like(request, recipe_id):
+    if request.user.is_authenticated:
+        recipe = get_object_or_404(Recipe, pk=recipe_id)
+        request.user.liked_recipes.add(recipe)
+        return HttpResponse()
+    else:
+        return HttpResponseRedirect('/accounts/google/login')
+
+def unlike(request, recipe_id):
+    if request.user.is_authenticated:
+        recipe = get_object_or_404(Recipe, pk=recipe_id)
+        request.user.liked_recipes.remove(recipe)
+        return HttpResponse()
+    else:
+        return HttpResponseRedirect('/accounts/google/login')
 
 def create_recipe(request):
     return render(request, 'app/create_recipe.html' )

@@ -1,6 +1,40 @@
 {% extends 'bootstrap5/bootstrap5.html' %}
 {% load bootstrap5 %}
 
+{% block bootstrap5_extra_head %}
+    <script>
+        function like(recipe_id) {
+            fetch(`/like/${recipe_id}`).then(response => {
+                if (response.ok) {
+                    button = document.getElementById(`like${recipe_id}`);
+                    button.id      = `unlike${recipe_id}`;
+                    button.name    = `unlike${recipe_id}`;
+                    button.setAttribute('class', 'btn btn-danger');
+                    button.setAttribute('onclick', `unlike(${recipe_id})`);
+                    button.innerHTML = 'Unlike';
+                } else {
+                    // can maybe put an error message here but not very important
+                }
+            })
+        }
+
+        function unlike(recipe_id) {
+            fetch(`/unlike/${recipe_id}`).then(response => {
+                if (response.ok) {
+                    button = document.getElementById(`unlike${recipe_id}`);
+                    button.id      = `like${recipe_id}`;
+                    button.name    = `like${recipe_id}`;
+                    button.setAttribute('class', 'btn btn-success');
+                    button.setAttribute('onclick', `like(${recipe_id})`);
+                    button.innerHTML = 'Like';
+                } else {
+                    // can maybe put an error message here but not very important
+                }
+            })
+        }
+    </script>
+{% endblock bootstrap5_extra_head %}
+
 {% block bootstrap5_content %}
     <div class='container mt-5'>
         <nav class='navbar navbar-expand'>
