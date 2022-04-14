@@ -88,7 +88,7 @@ def submit_comment(request, recipe_id):
 
     if request.user.is_authenticated:
         try:
-            commenttext          = request.POST.get("comment")
+            commenttext = request.POST.get("comment")
         except (KeyError):
             return HttpResponseRedirect(reverse('app:profile'))
         else:
@@ -104,9 +104,10 @@ def submit_comment(request, recipe_id):
         return HttpResponseRedirect(reverse('app:comment', kwargs={'recipe_id': recipe_id}))
 
 def delete_comment(request, recipe_id, comment_id):
-    recipe=Recipe.objects.get(pk=recipe_id)
-    comment=Comment.objects.get(pk=comment_id)
-    recipe.comments.remove(comment)
+    recipe  = Recipe.objects.get(pk=recipe_id)
+    comment = Comment.objects.get(pk=comment_id)
+    if request.user.is_authenticated and comment.author == request.user:
+        recipe.comments.remove(comment)
     return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
 
 
