@@ -48,7 +48,7 @@ def submit_recipe(request):
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
-            if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps and recipeimage):
+            if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
             recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients,
                             time=recipetime, steps=recipesteps, image=recipeimage)
@@ -92,27 +92,34 @@ def submit_fork(request, recipe_id):
         return HttpResponseRedirect(reverse('app:fork', kwargs={'recipe_id': recipe_id}))
 
 def comment(request, recipe_id):
-    recipe=Recipe.objects.get(pk=recipe_id)
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
     return render(request, "app/create_comment.html", {'recipe': recipe})
 
 def submit_comment(request, recipe_id):
-    recipe=Recipe.objects.get(pk=recipe_id)
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
 
     if request.user.is_authenticated:
         try:
-            commenttext          = request.POST.get("comment")
+            commenttext = request.POST.get("comment")
         except (KeyError):
             return HttpResponseRedirect(reverse('app:profile'))
         else:
             if not(commenttext):
                 return HttpResponseRedirect(reverse('app:profile'))
-            comments=Comment(author=request.user, comment_text=commenttext)
+            comments=Comment(author=request.user, comment_text=commenttext, recipe=recipe)
             comments.save()
-            recipe.comments.add(comments)
 
-        return HttpResponseRedirect(reverse('app:profile'))
+        return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
 
     else:
         return HttpResponseRedirect(reverse('app:comment', kwargs={'recipe_id': recipe_id}))
+
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    recipe_id = comment.recipe.id
+    if request.user.is_authenticated and comment.author == request.user:
+        comment.delete()
+    return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
+
 
     

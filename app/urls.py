@@ -13,4 +13,5 @@ urlpatterns = [
     path('searchbar',                   views.searchbar,        name='searchbar'),
     path('comment/<int:recipe_id>',     views.comment,          name="comment"),
     path('submit_comment/<int:recipe_id>', views.submit_comment, name='submit_comment'),
+    path('delete/comment/<int:comment_id>', views.delete_comment, name='delete_comment'),
 ]

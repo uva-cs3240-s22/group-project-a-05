@@ -45,8 +45,13 @@
 
     <h3>Comments</h3>
     {% for comment in recipe.comments.all %}
+    {% if user.is_authenticated and user == comment.author %}
+        <p><strong>{{comment.author}}: </strong>{{ comment }} <a href="../delete/comment/{{comment.id}}" class="btn btn-danger"> Delete </a></p> 
+    {% else %}
     <p><strong>{{comment.author}}: </strong>{{ comment }} </p>
+    {% endif %}
     {% endfor %}
+
     
 
 {% endblock content %}
