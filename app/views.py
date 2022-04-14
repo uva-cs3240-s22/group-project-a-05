@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from .models import Recipe
+from .models import Recipe, Comment
 
 # Create your views here.
 def recipe_list(request):
@@ -78,3 +78,36 @@ def submit_fork(request, recipe_id):
 
     else:
         return HttpResponseRedirect(reverse('app:fork', kwargs={'recipe_id': recipe_id}))
+
+def comment(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    return render(request, "app/create_comment.html", {'recipe': recipe})
+
+def submit_comment(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+
+    if request.user.is_authenticated:
+        try:
+            commenttext = request.POST.get("comment")
+        except (KeyError):
+            return HttpResponseRedirect(reverse('app:profile'))
+        else:
+            if not(commenttext):
+                return HttpResponseRedirect(reverse('app:profile'))
+            comments=Comment(author=request.user, comment_text=commenttext, recipe=recipe)
+            comments.save()
+
+        return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
+
+    else:
+        return HttpResponseRedirect(reverse('app:comment', kwargs={'recipe_id': recipe_id}))
+
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    recipe_id = comment.recipe.id
+    if request.user.is_authenticated and comment.author == request.user:
+        comment.delete()
+    return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
+
+
+    
