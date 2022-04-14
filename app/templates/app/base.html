@@ -36,8 +36,8 @@
 {% endblock bootstrap5_extra_head %}
 
 {% block bootstrap5_content %}
-    <div class='container mt-5'>
-        <nav class='navbar navbar-expand'>
+    <div class='container mt-5 mb-5'>
+        <nav class='navbar navbar-expand sticky-top bg-light'>
             <a href="{% url 'app:index' %}" class='nav-link justify-content-start'>Home</a>
             <div class='collapse navbar-collapse justify-content-end'>
                 {% if user.is_authenticated %}
@@ -49,6 +49,6 @@
             </div>
         </nav>
         {% block content %}{% endblock content %}
+        <footer class='text-center mt-3'>&copy A-05, MIT License</footer>
     </div>
-    <footer class='container text-center fixed-bottom mb-5'>&copy A-05, MIT License</footer>
 {% endblock bootstrap5_content %}
