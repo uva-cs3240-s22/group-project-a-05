@@ -1,8 +1,11 @@
+from unicodedata import name
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Recipe
-import json
+from .models import Recipe, Comment
+from django.db.models import Q,CharField
+from django.db.models.functions import Lower
+CharField.register_lookup(Lower, "lower")
 
 # Create your views here.
 def recipe_list(request):
@@ -11,6 +14,14 @@ def recipe_list(request):
         "Recipes" : recipes
     }
     return render(request, 'app/recipe_list.html', context)
+
+def searchbar(request):
+    if request.method == "POST":
+        searched = request.POST['searched'].lower()
+        recipes = Recipe.objects.filter(Q(name__lower__contains = searched))
+        return render(request, 'app/searchbar.html', {'searched':searched, 'recipes': recipes})
+    else:
+        return render(request, 'app/searchbar.html', {})
 
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
@@ -89,3 +100,36 @@ def submit_fork(request, recipe_id):
 
     else:
         return HttpResponseRedirect(reverse('app:fork', kwargs={'recipe_id': recipe_id}))
+
+def comment(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    return render(request, "app/create_comment.html", {'recipe': recipe})
+
+def submit_comment(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+
+    if request.user.is_authenticated:
+        try:
+            commenttext = request.POST.get("comment")
+        except (KeyError):
+            return HttpResponseRedirect(reverse('app:profile'))
+        else:
+            if not(commenttext):
+                return HttpResponseRedirect(reverse('app:profile'))
+            comments=Comment(author=request.user, comment_text=commenttext, recipe=recipe)
+            comments.save()
+
+        return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
+
+    else:
+        return HttpResponseRedirect(reverse('app:comment', kwargs={'recipe_id': recipe_id}))
+
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(Comment, pk=comment_id)
+    recipe_id = comment.recipe.id
+    if request.user.is_authenticated and comment.author == request.user:
+        comment.delete()
+    return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
+
+
+    

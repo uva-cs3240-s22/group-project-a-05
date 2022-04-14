@@ -47,6 +47,11 @@
                     <a href="/accounts/google/login">Login</a>
                 {% endif %}
             </div>
+            <form class = "d-flex" method=POST action="{% url 'app:searchbar' %}">
+                {% csrf_token %}
+                <input class="form-control" type="search" placeholder="Search Recipe" aria-label="Search" name= "searched">
+                <button class='btn btn-outline-secondary' type="submit"> Search </button>
+            </form>
         </nav>
         {% block content %}{% endblock content %}
         <footer class='text-center mt-3'>&copy A-05, MIT License</footer>
