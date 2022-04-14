@@ -14,6 +14,7 @@
                     </div>
                     <div class="col">
                         <a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a> <br>
+                        <b>By:</b> {{ recipe.author }}<br>
                         <b>Time to Cook: </b>{{ recipe.time }} <br>
                         <b>Recipe Description: </b>{{ recipe.description }} <br>
                         <b>Ingredients: </b>{{ recipe.ingredients }} <br>
