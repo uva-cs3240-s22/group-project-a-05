@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponseRedirect
-from .models import Recipe
+from .models import Recipe, Comment
 
 # Create your views here.
 def recipe_list(request):
@@ -78,3 +78,36 @@ def submit_fork(request, recipe_id):
 
     else:
         return HttpResponseRedirect(reverse('app:fork', kwargs={'recipe_id': recipe_id}))
+
+def comment(request, recipe_id):
+    recipe=Recipe.objects.get(pk=recipe_id)
+    return render(request, "app/create_comment.html", {'recipe': recipe})
+
+def submit_comment(request, recipe_id):
+    recipe=Recipe.objects.get(pk=recipe_id)
+
+    if request.user.is_authenticated:
+        try:
+            commenttext          = request.POST.get("comment")
+        except (KeyError):
+            return HttpResponseRedirect(reverse('app:profile'))
+        else:
+            if not(commenttext):
+                return HttpResponseRedirect(reverse('app:profile'))
+            comments=Comment(author=request.user, comment_text=commenttext)
+            comments.save()
+            recipe.comments.add(comments)
+
+        return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
+
+    else:
+        return HttpResponseRedirect(reverse('app:comment', kwargs={'recipe_id': recipe_id}))
+
+def delete_comment(request, recipe_id, comment_id):
+    recipe=Recipe.objects.get(pk=recipe_id)
+    comment=Comment.objects.get(pk=comment_id)
+    recipe.comments.remove(comment)
+    return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
+
+
+    
