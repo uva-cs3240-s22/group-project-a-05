@@ -4,6 +4,10 @@
 {% block bootstrap5_title %}A-05 Project Recipe Detail{% endblock bootstrap5_title %}
 {% block content %}
     <h2>{{ recipe.name }}</h2>
+    {% if recipe.image %}
+    <img src= "{{ recipe.image.url }}" style="max-width:100%;max-height:400px">
+    {% endif %}
+    
     <p>
         By: {{ recipe.author }}<br>
         {% if recipe.forked_from %}
@@ -30,9 +34,4 @@
 
     <h3>Step-by-Step Instructions</h3>
     <p>{{ recipe.steps }}</p>
-
-    {% if recipe.image %}
-        <h3>Images</h3>
-        <img src= " {{ recipe.image.url }} " width="200px" height = "200px" >
-    {% endif %}
 {% endblock content %}
