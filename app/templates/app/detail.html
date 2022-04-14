@@ -4,6 +4,10 @@
 {% block bootstrap5_title %}A-05 Project Recipe Detail{% endblock bootstrap5_title %}
 {% block content %}
     <h2>{{ recipe.name }}</h2>
+    {% if recipe.image %}
+        <img src= "{{ recipe.image.url }}" style="max-width:100%;max-height:400px">
+    {% endif %}
+    
     <p>
         By: {{ recipe.author }}<br>
         {% if recipe.forked_from %}
@@ -11,20 +15,14 @@
         {% endif %}
     </p>
 
-    <!-- Want to change this to an implementation that doesn't require a redirect -->
-    <!-- I'm sure it's possible, just don't know how rn and this is good enough for now-->
-    <!-- Will probably wait until we change it to add like button to the list view-->
     {% if user.is_authenticated %}
-        <form action="{% url 'app:detail' recipe.id %}" method='post'>
-            {% csrf_token %}
-            {% if recipe not in user.liked_recipes.all %}
-                <input type="submit" name="like" id="like" class='btn btn-success' value='Like'>
-            {% else %}
-                <input type="submit" name="unlike" id="unlike" class='btn btn-danger' value='Unlike'>
-            {% endif %}
-            <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a> 
-            <a href="../comment/{{recipe.id}}" class="btn btn-warning"> Comment</a> <br>
-        </form>
+        {% if recipe not in user.liked_recipes.all %}
+            <button name="like{{recipe.id}}" id="like{{recipe.id}}" class='btn btn-success' onclick="like({{recipe.id}})">Like</button>
+        {% else %}
+            <button name="unlike{{recipe.id}}" id="unlike{{recipe.id}}" class='btn btn-danger' onclick="unlike({{recipe.id}})">Unlike</button>
+        {% endif %}
+        <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a> <br>
+        <a href="../comment/{{recipe.id}}" class="btn btn-warning"> Comment</a> <br>
     {% endif %}
 
     <p>Time to cook: {{recipe.time }}</p>
@@ -38,20 +36,14 @@
     <h3>Step-by-Step Instructions</h3>
     <p>{{ recipe.steps }}</p>
 
-    {% if recipe.image %}
-        <h3>Images</h3>
-        <img src= " {{ recipe.image.url }} " width="200px" height = "200px" >
-    {% endif %}
-
     <h3>Comments</h3>
     {% for comment in recipe.comments.all %}
-    {% if user.is_authenticated and user == comment.author %}
-        <p><strong>{{comment.author}}: </strong>{{ comment }} <a href="../delete/comment/{{comment.id}}" class="btn btn-danger"> Delete </a></p> 
-    {% else %}
-    <p><strong>{{comment.author}}: </strong>{{ comment }} </p>
-    {% endif %}
+        {% if user.is_authenticated and user == comment.author %}
+            <p><strong>{{comment.author}}: </strong>{{ comment }} <a href="../delete/comment/{{comment.id}}" class="btn btn-danger"> Delete </a></p> 
+        {% else %}
+            <p><strong>{{comment.author}}: </strong>{{ comment }} </p>
+        {% endif %}
     {% endfor %}
-
-    
+   
 
 {% endblock content %}
