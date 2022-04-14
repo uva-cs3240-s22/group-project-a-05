@@ -3,21 +3,21 @@
 {% block boostrap5_title %}A-05 Project Recipe Creation{% endblock boostrap5_title %}
 {% block content %}
    <center>  
-    {% if searched %}
-       <h1> You search for {{searched}} </h1>
-       <br/> 
-       {% if recipes%}
-       {% for recipe in recipes %}
-          <a href="{% url 'app:detail' recipe.id %}">{{ recipe }} </a> <br>
-           {% if recipe.image %} 
-            <b><img src= " {{ recipe.image.url }} " width="200px" height = "200px" ><br>
+      {% if searched %}
+         <h1> You search for {{searched}} </h1>
+         <br/> 
+         {% if recipes%}
+         {% for recipe in recipes %}
+            <a href="{% url 'app:detail' recipe.id %}">{{ recipe }} </a> <br>
+            {% if recipe.image %} 
+               <img src= " {{ recipe.image.url }} " width="200px" height = "200px" ><br>
             {% endif %}
-       {% endfor %}
-       {% else %}
-       <h1> No Recipe found </h1>
-       {% endif%}
-    {% else %}
-       <h1> Sorry, you may forget to search a valid recipe </h1>
-    {% endif %}
+         {% endfor %}
+      {% else %}
+      <h1> No Recipe found </h1>
+      {% endif%}
+   {% else %}
+      <h1> Sorry, you may forget to search a valid recipe </h1>
+   {% endif %}
    </center>     
 {% endblock content %}
