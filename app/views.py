@@ -103,4 +103,11 @@ def submit_comment(request, recipe_id):
     else:
         return HttpResponseRedirect(reverse('app:comment', kwargs={'recipe_id': recipe_id}))
 
+def delete_comment(request, recipe_id, comment_id):
+    recipe=Recipe.objects.get(pk=recipe_id)
+    comment=Comment.objects.get(pk=comment_id)
+    recipe.comments.remove(comment)
+    return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
+
+
     

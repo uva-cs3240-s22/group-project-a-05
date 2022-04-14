@@ -12,4 +12,5 @@ urlpatterns = [
     path('submit_fork/<int:recipe_id>', views.submit_fork,      name='submit_fork'),
     path('comment/<int:recipe_id>', views.comment, name="comment"),
     path('submit_comment/<int:recipe_id>', views.submit_comment, name='submit_comment'),
+    path('delete/comment/<int:recipe_id>/<int:comment_id>', views.delete_comment, name='delete_comment'),
 ]
