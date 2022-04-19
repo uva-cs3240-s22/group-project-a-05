@@ -41,6 +41,7 @@
             <a href="{% url 'app:index' %}" class='nav-link justify-content-start'>Home</a>
             <div class='collapse navbar-collapse justify-content-end'>
                 {% if user.is_authenticated %}
+                    <a href="/create" class='nav-link'>Create</a>
                     <a href="{% url 'app:profile' %}" class='nav-link'>Profile</a>
                     <a href="/accounts/logout" class='nav-link'>Logout</a>
                 {% else %}
