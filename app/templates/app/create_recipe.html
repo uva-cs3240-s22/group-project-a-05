@@ -1,19 +1,68 @@
 {% extends 'app/base.html' %}
 {% load bootstrap5 %}
 
-{% block scripts %}<script>
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script>
+    function clearTooltips(event) {
+        tooltipElements = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipElements.forEach(tooltipElement => {
+            if (tooltipElement != event.target) {
+                tooltip = bootstrap.Tooltip.getInstance(tooltipElement);
+                if (tooltip) {
+                    tooltip.hide();
+                }
+            }
+        });
+    }
+
+    // from bootstrap documentation: https://getbootstrap.com/docs/5.0/components/tooltips/
+    function initializeTooltips() {
+        document.body.onclick = clearTooltips;
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    }
+    window.onload = initializeTooltips;
+
     function addIngredient() {
+        // clear tooltips without checking event target (which is guaranteed not to be a delete button)
+        tooltipElements = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipElements.forEach(tooltipElement => {
+            tooltip = bootstrap.Tooltip.getInstance(tooltipElement);
+            if (tooltip) {
+                tooltip.hide();
+            }
+        });
+
         ingredients = document.getElementById('ingredients');
-        ingredient_count = document.getElementById('ingredient_count');
         new_ingredient = ingredients.lastElementChild.cloneNode(deep=true);
-        new_ingredient.children[0].children[0].children[0].id = `ingredient${ingredient_count.value}`
-        new_ingredient.children[0].children[1].children[0].id = `quantity${ingredient_count.value}`
-        new_ingredient.children[0].children[2].children[0].id = `units${ingredient_count.value}`
-        for (let i = 0; i < 3; i++) {
-            console.log(new_ingredient.children[0].children[i].children[0])
-        }
-        ingredients.appendChild(new_ingredient)
+
+        ingredient_field    = new_ingredient.children[0].children[0].children[0];
+        quantity_field      = new_ingredient.children[0].children[1].children[0];
+        units_field         = new_ingredient.children[0].children[2].children[0];
+        delete_button       = new_ingredient.children[0].children[3].children[0];
+
+        ingredient_field.id = `ingredient${ingredient_count.value}`;
+        quantity_field.id = `quantity${ingredient_count.value}`;
+        units_field.id = `units${ingredient_count.value}`;
+        delete_button.id = `delete${ingredient_count.value}`;
+        delete_button.setAttribute('onclick', `deleteIngredient(${ingredient_count.value})`);
+
+        ingredient_field.value = "";
+        quantity_field.value = "";
+        units_field.value = "";
+
+        ingredients.appendChild(new_ingredient);
         ingredient_count.value = parseInt(ingredient_count.value) + 1;
+        initializeTooltips();
+    }
+
+    function deleteIngredient(ingredient_num) {
+        if (document.getElementById("ingredients").childElementCount > 1) {
+            document.getElementById(`ingredient${ingredient_num}`).parentElement.parentElement.parentElement.remove();
+        }
     }
 </script>{% endblock scripts %}
 
@@ -41,16 +90,22 @@
                         <div class='col'><input id='ingredient0' type='text' class='form-control' required></div>
                         <div class='col'><input id='quantity0' type='number' class='form-control' required></div>
                         <div class='col'><input id='units0' type='text' class='form-control' required></div>
+                        <div class='col'><button id='delete0' type='button' class='btn btn-danger' data-bs-toggle='tooltip' data-bs-trigger='click'
+                            title="You must have at least one ingredient" onclick='deleteIngredient(0)'>Delete Ingredient</button></div>
                     </div><br></div>
                     <div><div class='row'>
                         <div class='col'><input id='ingredient1' type='text' class='form-control' required></div>
                         <div class='col'><input id='quantity1' type='number' class='form-control' required></div>
                         <div class='col'><input id='units1' type='text' class='form-control' required></div>
+                        <div class='col'><button id='delete1' type='button' class='btn btn-danger' data-bs-toggle='tooltip' data-bs-trigger='click'
+                            title="You must have at least one ingredient" onclick='deleteIngredient(1)'>Delete Ingredient</button></div>
                     </div><br></div>
                     <div><div class='row'>
                         <div class='col'><input id='ingredient2' type='text' class='form-control' required></div>
                         <div class='col'><input id='quantity2' type='number' class='form-control' required></div>
                         <div class='col'><input id='units2' type='text' class='form-control' required></div>
+                        <div class='col'><button id='delete2' type='button' class='btn btn-danger' data-bs-toggle='tooltip' data-bs-trigger='click'
+                            title="You must have at least one ingredient" onclick='deleteIngredient(2)'>Delete Ingredient</button></div>
                     </div><br></div>
                 </section>
                 <input id='ingredient_count' type="hidden" value=3>
@@ -68,4 +123,6 @@
     {% else %}
         <p>Please sign in first to post a recipe</p>
     {% endif %}
+
+
 {% endblock content %}
