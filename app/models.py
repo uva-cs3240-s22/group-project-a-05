@@ -39,3 +39,15 @@ class Ingredients (models.Model):
     
     def __str__(self):
         return self.name
+
+class Ingredients (models.Model):
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+    name = models.CharField(max_length=400)
+    amount = models.FloatField()
+    unit = models.CharField(max_length=50) #larger than necessary, change later
+
+    class Meta:
+        order_with_respect_to = 'recipe'
+    
+    def __str__(self):
+        return self.name
