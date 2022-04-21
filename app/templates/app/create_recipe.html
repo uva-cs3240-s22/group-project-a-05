@@ -45,8 +45,11 @@
         delete_button       = new_ingredient.children[0].children[3].children[0];
 
         ingredient_field.id = `ingredient${ingredient_count.value}`;
+        ingredient_field.name = `ingredient${ingredient_count.value}`;
         quantity_field.id = `quantity${ingredient_count.value}`;
+        quantity_field.name = `quantity${ingredient_count.value}`;
         units_field.id = `units${ingredient_count.value}`;
+        units_field.name = `units${ingredient_count.value}`;
         delete_button.id = `delete${ingredient_count.value}`;
         delete_button.setAttribute('onclick', `deleteIngredient(${ingredient_count.value})`);
 
@@ -88,33 +91,33 @@
                 <div class='row'>
                     <div class='col'>Ingredient Name</div>
                     <div class='col-1'>Quantity</div>
-                    <div class='col-2'>Units (e.g. cups, grams, tbsp, etc)</div>
+                    <div class='col-2'>Units (e.g. cups, grams, mL)</div>
                     <div class='col-2'></div>
                 </div>
-                <section id='ingredients'>
+                <div id='ingredients'>
                     <div><div class='row'>
-                        <div class='col'><input id='ingredient0' type='text' class='form-control' required></div>
-                        <div class='col-1'><input id='quantity0' type='number' class='form-control' required></div>
-                        <div class='col-2'><input id='units0' type='text' class='form-control' required></div>
+                        <div class='col'><input id='ingredient0' name='ingredient0' type='text' class='form-control' required></div>
+                        <div class='col-1'><input id='quantity0' name='quantity0' type='number' class='form-control' required></div>
+                        <div class='col-2'><input id='units0' name='units0' type='text' class='form-control' required></div>
                         <div class='col-2 d-flex justify-content-end'><button id='delete0' type='button' class='btn btn-danger' data-bs-toggle='tooltip' data-bs-trigger='click'
                             title="You must have at least one ingredient" onclick='deleteIngredient(0)'>Delete Ingredient</button></div>
                     </div><br></div>
                     <div><div class='row'>
-                        <div class='col'><input id='ingredient1' type='text' class='form-control' required></div>
-                        <div class='col-1'><input id='quantity1' type='number' class='form-control' required></div>
-                        <div class='col-2'><input id='units1' type='text' class='form-control' required></div>
+                        <div class='col'><input id='ingredient1' name='ingredient1' type='text' class='form-control' required></div>
+                        <div class='col-1'><input id='quantity1' name='quantity1' type='number' class='form-control' required></div>
+                        <div class='col-2'><input id='units1' name='units1' type='text' class='form-control' required></div>
                         <div class='col-2 d-flex justify-content-end'><button id='delete1' type='button' class='btn btn-danger' data-bs-toggle='tooltip' data-bs-trigger='click'
                             title="You must have at least one ingredient" onclick='deleteIngredient(1)'>Delete Ingredient</button></div>
                     </div><br></div>
                     <div><div class='row'>
-                        <div class='col'><input id='ingredient2' type='text' class='form-control' required></div>
-                        <div class='col-1'><input id='quantity2' type='number' class='form-control' required></div>
-                        <div class='col-2'><input id='units2' type='text' class='form-control' required></div>
+                        <div class='col'><input id='ingredient2' name='ingredient2' type='text' class='form-control' required></div>
+                        <div class='col-1'><input id='quantity2' name='quantity2' type='number' class='form-control' required></div>
+                        <div class='col-2'><input id='units2' name='units2' type='text' class='form-control' required></div>
                         <div class='col-2 d-flex justify-content-end'><button id='delete2' type='button' class='btn btn-danger' data-bs-toggle='tooltip' data-bs-trigger='click'
                             title="You must have at least one ingredient" onclick='deleteIngredient(2)'>Delete Ingredient</button></div>
                     </div><br></div>
-                </section>
-                <input id='ingredient_count' type="hidden" value=3>
+                </div>
+                <input id='ingredient_count' name='ingredient_count' type="hidden" value=3>
                 <button id='add_ingredient' name='add_ingredient' type='button' class='btn btn-primary' onclick='addIngredient()'>Add Ingredient</button><br>
 
                 <label for='recipe_steps' class='form-label'>Recipe Instructions:</label>
