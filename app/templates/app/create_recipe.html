@@ -1,6 +1,22 @@
 {% extends 'app/base.html' %}
 {% load bootstrap5 %}
 
+{% block scripts %}<script>
+    function addIngredient() {
+        ingredients = document.getElementById('ingredients');
+        ingredient_count = document.getElementById('ingredient_count');
+        new_ingredient = ingredients.lastElementChild.cloneNode(deep=true);
+        new_ingredient.children[0].children[0].children[0].id = `ingredient${ingredient_count.value}`
+        new_ingredient.children[0].children[1].children[0].id = `quantity${ingredient_count.value}`
+        new_ingredient.children[0].children[2].children[0].id = `units${ingredient_count.value}`
+        for (let i = 0; i < 3; i++) {
+            console.log(new_ingredient.children[0].children[i].children[0])
+        }
+        ingredients.appendChild(new_ingredient)
+        ingredient_count.value = parseInt(ingredient_count.value) + 1;
+    }
+</script>{% endblock scripts %}
+
 {% block boostrap5_title %}A-05 Project Recipe Creation{% endblock boostrap5_title %}
 
 {% block content %}
@@ -19,15 +35,26 @@
             
                 <!-- <label for='recipe_ingredients' class='form-label'>Recipe Ingredients:</label>
                 <textarea id='recipe_ingredients' name="recipe_ingredients" class='form-control' required></textarea><br> -->
-                    
-                {% for ingredient in Ingredients %}
-                    <li class="list-group-item">
-                    <b>Name: </b>{{ ingredient.name }} <br>
-                    <b>Amount: </b>{{ ingredient.amount }} <br>
-                    <b>Unit: </b>{{ ingredient.unit }} <br>
-                    </li>
-                <br/>
-                {% endfor %}
+                <label for='ingredients' class='form-label'>Ingredients List</label>
+                <section id='ingredients'>
+                    <div><div class='row'>
+                        <div class='col'><input id='ingredient0' type='text' class='form-control' required></div>
+                        <div class='col'><input id='quantity0' type='number' class='form-control' required></div>
+                        <div class='col'><input id='units0' type='text' class='form-control' required></div>
+                    </div><br></div>
+                    <div><div class='row'>
+                        <div class='col'><input id='ingredient1' type='text' class='form-control' required></div>
+                        <div class='col'><input id='quantity1' type='number' class='form-control' required></div>
+                        <div class='col'><input id='units1' type='text' class='form-control' required></div>
+                    </div><br></div>
+                    <div><div class='row'>
+                        <div class='col'><input id='ingredient2' type='text' class='form-control' required></div>
+                        <div class='col'><input id='quantity2' type='number' class='form-control' required></div>
+                        <div class='col'><input id='units2' type='text' class='form-control' required></div>
+                    </div><br></div>
+                </section>
+                <input id='ingredient_count' type="hidden" value=3>
+                <button id='add_ingredient' name='add_ingredient' type='button' class='btn btn-primary' onclick='addIngredient()'>Add Ingredient</button><br>
 
                 <label for='recipe_steps' class='form-label'>Recipe Instructions:</label>
                 <textarea id='recipe_steps' name="recipe_steps" class='form-control' required></textarea><br>

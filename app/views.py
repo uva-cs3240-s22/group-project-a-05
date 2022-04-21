@@ -53,7 +53,6 @@ def submit_recipe(request):
             recipetime          = request.POST.get("recipe_time")
             recipedescription   = request.POST.get("recipe_description")
             recipeingredients   = request.POST.get("recipe_ingredients")
-
             recipesteps         = request.POST.get("recipe_steps")
             recipeimage         = request.FILES.get("recipe_image")
         except (KeyError):
