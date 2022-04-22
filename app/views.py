@@ -26,7 +26,8 @@ def searchbar(request):
 
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
-    return render(request, 'app/detail.html', { 'recipe' : recipe })
+    ingredients_amounts = [ingredient.amount for ingredient in recipe.ingredients.all()]
+    return render(request, 'app/detail.html', { 'recipe': recipe, 'ingredients_amounts':ingredients_amounts })
 
 def like(request, recipe_id):
     if request.user.is_authenticated:
