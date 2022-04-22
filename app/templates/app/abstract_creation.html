@@ -5,7 +5,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script>
     function clearTooltips(event) {
-        tooltipElements = document.querySelectorAll("[data-bs-toggle="tooltip"]");
+        tooltipElements = document.querySelectorAll('[data-bs-toggle="tooltip"]');
         tooltipElements.forEach(tooltipElement => {
             if (tooltipElement != event.target) {
                 tooltip = bootstrap.Tooltip.getInstance(tooltipElement);
@@ -19,7 +19,7 @@
     // from bootstrap documentation: https://getbootstrap.com/docs/5.0/components/tooltips/
     function initializeTooltips() {
         document.body.onclick = clearTooltips;
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll("[data-bs-toggle="tooltip"]"))
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         })
@@ -28,7 +28,7 @@
 
     function addIngredient() {
         // clear tooltips without checking event target (which is guaranteed not to be a delete button)
-        tooltipElements = document.querySelectorAll("[data-bs-toggle="tooltip"]");
+        tooltipElements = document.querySelectorAll('[data-bs-toggle="tooltip"]');
         tooltipElements.forEach(tooltipElement => {
             tooltip = bootstrap.Tooltip.getInstance(tooltipElement);
             if (tooltip) {
@@ -140,6 +140,4 @@
     {% else %}
         <p>{% block not_signed_in_message %}{% endblock not_signed_in_message %}</p>
     {% endif %}
-
-
 {% endblock content %}
