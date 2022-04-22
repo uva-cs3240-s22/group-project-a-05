@@ -59,9 +59,8 @@ def submit_recipe(request):
             for i in range(int(request.POST['ingredient_count'])):
                 if ("ingredient%s" % i) in request.POST:
                     ingredients.append({'name':request.POST["ingredient%s"%i], 'amount':request.POST["quantity%s"%i], \
-                        'units':request.POST['units%s'%i]})
+                                        'units':request.POST['units%s'%i]})
         except (KeyError):
-            print(sys.exc_info())
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
             if not(recipename and recipetime and recipedescription and recipesteps):
@@ -69,7 +68,7 @@ def submit_recipe(request):
             recipe=Recipe(author=request.user, name=recipename, description=recipedescription,
                             time=recipetime, steps=recipesteps, image=recipeimage)
             ingredients = [Ingredient(recipe=recipe, name=ingredient['name'], amount=ingredient['amount'], \
-                units=ingredient['units']) for ingredient in ingredients]
+                                        units=ingredient['units']) for ingredient in ingredients]
             
             # wait until everything has been created successfully before saving anything
             recipe.save()
@@ -96,17 +95,27 @@ def submit_fork(request, recipe_id):
             recipename          = request.POST.get("recipe_name")
             recipetime          = request.POST.get("recipe_time")
             recipedescription   = request.POST.get("recipe_description")
-            recipeingredients   = request.POST.get("recipe_ingredients")
             recipesteps         = request.POST.get("recipe_steps")
             recipeimage         = request.FILES.get("recipe_image")
+            ingredients         = []
+            for i in range(int(request.POST['ingredient_count'])):
+                if ("ingredient%s" % i) in request.POST:
+                    ingredients.append({'name':request.POST["ingredient%s"%i], 'amount':request.POST["quantity%s"%i], \
+                                        'units':request.POST['units%s'%i]})
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
-            if not(recipename and recipetime and recipedescription and recipeingredients and recipesteps):
+            if not(recipename and recipetime and recipedescription and recipesteps):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
-            recipes=Recipe(author=request.user, name=recipename, description=recipedescription, ingredients=recipeingredients,
+            recipe=Recipe(author=request.user, name=recipename, description=recipedescription,
                             time=recipetime, steps=recipesteps, image=recipeimage, forked_from=parent_recipe)
-            recipes.save()
+            ingredients = [Ingredient(recipe=recipe, name=ingredient['name'], amount=ingredient['amount'], \
+                                        units=ingredient['units']) for ingredient in ingredients]
+            
+            # wait until everything has been created successfully before saving anything
+            recipe.save()
+            for ingredient in ingredients:
+                ingredient.save()
 
         return HttpResponseRedirect(reverse('app:profile'))
 
@@ -142,6 +151,5 @@ def delete_comment(request, comment_id):
     if request.user.is_authenticated and comment.author == request.user:
         comment.delete()
     return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
-
 
     
