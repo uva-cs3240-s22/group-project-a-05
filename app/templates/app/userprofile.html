@@ -25,7 +25,6 @@
                                 <b>Ingredients: </b>{% for ingredient in recipe.ingredients.all %}
                                     {{ingredient.amount}} {{ingredient.units}} {{ingredient.name}}{% if not forloop.last %}, {% endif %}
                                 {% endfor %}<br>
-                                <b>Steps: </b>{{ recipe.steps }} <br>
                             </div>
                         </div>
                     </li>
@@ -56,7 +55,6 @@
                                 <b>Ingredients: </b>{% for ingredient in recipe.ingredients.all %}
                                     {{ingredient.amount}} {{ingredient.units}} {{ingredient.name}}{% if not forloop.last %}, {% endif %}
                                 {% endfor %}<br>
-                                <b>Steps: </b>{{ recipe.steps }} <br>
                             </div>
                         </div>
                     </li>
@@ -86,7 +84,6 @@
                                 <b>Ingredients: </b>{% for ingredient in recipe.ingredients.all %}
                                     {{ingredient.amount}} {{ingredient.units}} {{ingredient.name}}{% if not forloop.last %}, {% endif %}
                                 {% endfor %}<br>
-                                <b>Steps: </b>{{ recipe.steps }} <br>
                             </div>
                         </div>
                     </li>
