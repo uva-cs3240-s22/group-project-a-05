@@ -1,35 +1,5 @@
-{% extends 'app/base.html' %}
+{% extends 'app/abstract_creation.html' %}
 {% load bootstrap5 %}
 
-{% block boostrap5_title %}A-05 Project Recipe Creation{% endblock boostrap5_title %}
-
-{% block content %}
-    {% if user.is_authenticated %}
-        <form action="{% url 'app:submit_recipe' %}" method="post" enctype="multipart/form-data">
-            {% csrf_token %}
-            <fieldset>
-                <label for='recipe_name' class='form-label'>Recipe Title:</label>
-                <input id='recipe_name' name="recipe_name" type='text' class='form-control' required><br>
-
-                <label for='recipe_time' class='form-label'>Time to Cook:</label>
-                <input id='recipe_time' name="recipe_time" type='text' class='form-control' required><br>
-            
-                <label for='recipe_description' class='form-label'>Recipe Description:</label>
-                <textarea id='recipe_description' name="recipe_description" class='form-control' required></textarea><br>
-            
-                <label for='recipe_ingredients' class='form-label'>Recipe Ingredients:</label>
-                <textarea id='recipe_ingredients' name="recipe_ingredients" class='form-control' required></textarea><br>
-            
-                <label for='recipe_steps' class='form-label'>Recipe Instructions:</label>
-                <textarea id='recipe_steps' name="recipe_steps" class='form-control' required></textarea><br>
-
-                <label for='recipe_image'> Choose Picture (optional): </label>
-                <input type="file" id='recipe_image' name="recipe_image" accept=".jpg, .jpeg, .png"> 
-                
-                <input type="submit" value="Post" class='btn btn-primary'>
-            </fieldset>
-        </form>
-    {% else %}
-        <p>Please sign in first to post a recipe</p>
-    {% endif %}
-{% endblock content %}
+{% block submit_url %}{% url 'app:submit_recipe' %}{% endblock submit_url %}
+{% block not_signed_in_message %}Please sign in first to post a recipe{% endblock not_signed_in_message %}
