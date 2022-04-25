@@ -20,7 +20,9 @@
                     <b>By:</b> {{ recipe.author }}<br>
                     <b>Time to Cook: </b>{{ recipe.time }} <br>
                     <b>Recipe Description: </b>{{ recipe.description }} <br>
-                    <b>Ingredients: </b>{{ recipe.ingredients }} <br>
+                    <b>Ingredients: </b>{% for ingredient in recipe.ingredients.all %}
+                        {{ingredient.amount}} {{ingredient.units}} {{ingredient.name}}{% if not forloop.last %}, {% endif %}
+                    {% endfor %}<br>
                 </div>
             </div>
         </li>
