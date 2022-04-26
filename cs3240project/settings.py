@@ -32,6 +32,13 @@ DEBUG = False
 
 ALLOWED_HOSTS = []
 
+# GP-I Security 
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+
 
 # Application definition
 
