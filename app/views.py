@@ -19,7 +19,9 @@ def recipe_list(request):
 def searchbar(request):
     if request.method == "POST":
         searched = request.POST['searched'].lower()
-        recipes = Recipe.objects.filter(Q(name__lower__contains = searched))
+        recipes = Recipe.objects.filter(Q(name__lower__contains = searched) | Q(description__lower__contains = searched) |
+                                        Q(steps__lower__contains = searched) | Q(author__username__lower__contains = searched) |
+                                        Q(ingredients__name__lower__contains = searched))
         return render(request, 'app/searchbar.html', {'searched':searched, 'recipes': recipes})
     else:
         return render(request, 'app/searchbar.html', {})
