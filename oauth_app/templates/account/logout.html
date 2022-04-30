@@ -1,0 +1,28 @@
+{% extends "bootstrap5/bootstrap5.html" %}
+
+{% load i18n %}
+
+{% block bootstrap5_title %}{% trans "Sign Out" %}{% endblock %}
+
+{% block bootstrap5_content %}
+
+<div class="container">
+    <!-- vertical alignment goes brrrrrr -->
+    <br><br><br><br><br><br><br>
+    <div class="d-flex justify-content-center">
+        <h4>Are you sure you want to sign out?</h4>
+    </div>
+
+    <div class="d-flex justify-content-center mt-2">
+        <form method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        {% if redirect_field_value %}
+        <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+        {% endif %}
+        <a href="{% url 'app:index' %}" class='btn btn-secondary'>Cancel</a>
+        <button type="submit" class='btn btn-primary'>Sign Out</button>
+        </form>
+    </div>
+</div>
+
+{% endblock %}
