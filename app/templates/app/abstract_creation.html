@@ -125,7 +125,7 @@
                             title="You must have at least one ingredient" onclick="deleteIngredient(2)">Delete Ingredient</button></div>
                     </div><br></div>
                 {% endfor %}</div>
-                <input id="ingredient_count" name="ingredient_count" type="hidden" value=3>
+                <input id="ingredient_count" name="ingredient_count" type="hidden" value={{ recipe.ingredients.all.count|default:"3" }}>
                 <button id="add_ingredient" name="add_ingredient" type="button" class="btn btn-primary" onclick="addIngredient()">Add Ingredient</button><br>
 
                 <label for="recipe_steps" class="form-label">Recipe Instructions:</label>
