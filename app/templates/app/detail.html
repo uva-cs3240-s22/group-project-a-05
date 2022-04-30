@@ -63,7 +63,23 @@
     <h3>Comments</h3>
     {% for comment in recipe.comments.all %}
         {% if user.is_authenticated and user == comment.author %}
-            <p><strong>{{comment.author}}: </strong>{{ comment }} <a href="../delete/comment/{{comment.id}}" class="btn btn-danger"> Delete </a></p> 
+            <p><strong>{{comment.author}}: </strong>{{ comment }} <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal{{comment.id}}">Delete</button></p>
+            <div class="modal fade" id="modal{{comment.id}}" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5>Confirm Delete Comment</h5>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete your comment? This action cannot be undone.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <a href="../delete/comment/{{comment.id}}" class="btn btn-danger"> Delete </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         {% else %}
             <p><strong>{{comment.author}}: </strong>{{ comment }} </p>
         {% endif %}

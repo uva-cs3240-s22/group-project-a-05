@@ -6,7 +6,6 @@ from .models import Recipe, Comment, Ingredient
 from django.db.models import Q,CharField
 from django.db.models.functions import Lower
 CharField.register_lookup(Lower, "lower")
-import sys
 
 # Create your views here.
 def recipe_list(request):
