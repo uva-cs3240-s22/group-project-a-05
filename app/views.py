@@ -2,7 +2,7 @@ from unicodedata import name
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.http import HttpResponse, HttpResponseRedirect
-from .models import Recipe, Comment, Ingredient
+from .models import Recipe, Comment, Ingredient, Step
 from django.db.models import Q,CharField
 from django.db.models.functions import Lower
 CharField.register_lookup(Lower, "lower")
@@ -55,27 +55,33 @@ def submit_recipe(request):
             recipename          = request.POST.get("recipe_name")
             recipetime          = request.POST.get("recipe_time")
             recipedescription   = request.POST.get("recipe_description")
-            recipesteps         = request.POST.get("recipe_steps")
             recipeimage         = request.FILES.get("recipe_image")
             ingredients         = []
             for i in range(int(request.POST['ingredient_count'])):
                 if ("ingredient%s" % i) in request.POST:
                     ingredients.append({'name':request.POST["ingredient%s"%i], 'amount':request.POST["quantity%s"%i], \
                                         'units':request.POST['units%s'%i]})
+            steps = []
+            for i in range(int(request.POST['step_count'])):
+                if ("step%s" % i) in request.POST:
+                    steps.append(request.POST["step%s"%i])
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
-            if not(recipename and recipetime and recipedescription and recipesteps):
+            if not(recipename and recipetime and recipedescription and ingredients and steps):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
             recipe=Recipe(author=request.user, name=recipename, description=recipedescription,
-                            time=recipetime, steps=recipesteps, image=recipeimage)
+                            time=recipetime, image=recipeimage)
             ingredients = [Ingredient(recipe=recipe, name=ingredient['name'], amount=ingredient['amount'], \
                                         units=ingredient['units']) for ingredient in ingredients]
+            steps = [Step(recipe=recipe, text=step) for step in steps]
             
             # wait until everything has been created successfully before saving anything
             recipe.save()
             for ingredient in ingredients:
                 ingredient.save()
+            for step in steps:
+                step.save()
 
             return HttpResponseRedirect(reverse('app:profile'))
     else:
@@ -97,27 +103,33 @@ def submit_fork(request, recipe_id):
             recipename          = request.POST.get("recipe_name")
             recipetime          = request.POST.get("recipe_time")
             recipedescription   = request.POST.get("recipe_description")
-            recipesteps         = request.POST.get("recipe_steps")
             recipeimage         = request.FILES.get("recipe_image")
             ingredients         = []
             for i in range(int(request.POST['ingredient_count'])):
                 if ("ingredient%s" % i) in request.POST:
                     ingredients.append({'name':request.POST["ingredient%s"%i], 'amount':request.POST["quantity%s"%i], \
                                         'units':request.POST['units%s'%i]})
+            steps = []
+            for i in range(int(request.POST['step_count'])):
+                if ("step%s" % i) in request.POST:
+                    steps.append(request.POST["step%s"%i])
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
-            if not(recipename and recipetime and recipedescription and recipesteps):
+            if not(recipename and recipetime and recipedescription and ingredients and steps):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
             recipe=Recipe(author=request.user, name=recipename, description=recipedescription,
-                            time=recipetime, steps=recipesteps, image=recipeimage, forked_from=parent_recipe)
+                            time=recipetime, image=recipeimage, forked_from=parent_recipe)
             ingredients = [Ingredient(recipe=recipe, name=ingredient['name'], amount=ingredient['amount'], \
                                         units=ingredient['units']) for ingredient in ingredients]
-            
+            steps = [Step(recipe=recipe, text=step) for step in steps]
+
             # wait until everything has been created successfully before saving anything
             recipe.save()
             for ingredient in ingredients:
                 ingredient.save()
+            for step in steps:
+                step.save()
 
         return HttpResponseRedirect(reverse('app:profile'))
 

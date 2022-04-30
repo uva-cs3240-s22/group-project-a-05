@@ -58,7 +58,9 @@
     <p>{{ recipe.description }}</p>
 
     <h3>Step-by-Step Instructions</h3>
-    <p>{{ recipe.steps }}</p>
+    <ol>{% for step in recipe.steps_list.all %}
+        <li>{{step}}</li>
+    {% endfor %}</ol>
 
     <h3>Comments</h3>
     {% for comment in recipe.comments.all %}

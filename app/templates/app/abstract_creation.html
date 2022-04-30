@@ -67,6 +67,40 @@
             document.getElementById(`ingredient${ingredient_num}`).parentElement.parentElement.parentElement.remove();
         }
     }
+
+    function addStep() {
+        // clear tooltips without checking event target (which is guaranteed not to be a delete button)
+        tooltipElements = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        tooltipElements.forEach(tooltipElement => {
+            tooltip = bootstrap.Tooltip.getInstance(tooltipElement);
+            if (tooltip) {
+                tooltip.hide();
+            }
+        });
+
+        steps = document.getElementById("steps");
+        new_step = steps.lastElementChild.cloneNode(deep=true);
+
+        step_field      = new_step.children[0].children[0].children[0];
+        delete_button   = new_step.children[0].children[1].children[0];
+
+        step_field.id = `step${step_count.value}`;
+        step_field.name = `step${step_count.value}`;
+        delete_button.id = `delete${step_count.value}`;
+        delete_button.setAttribute("onclick", `deleteStep(${step_count.value})`);
+
+        step_field.value = "";
+
+        steps.appendChild(new_step);
+        step_count.value = parseInt(step_count.value) + 1;
+        initializeTooltips();
+    }
+
+    function deleteStep(step_num) {
+        if (document.getElementById("steps").childElementCount > 1) {
+            document.getElementById(`step${step_num}`).parentElement.parentElement.parentElement.remove();
+        }
+    }
 </script>{% endblock scripts %}
 
 {% block boostrap5_title %}A-05 Project Recipe Creation{% endblock boostrap5_title %}
@@ -128,8 +162,33 @@
                 <input id="ingredient_count" name="ingredient_count" type="hidden" value={{ recipe.ingredients.all.count|default:"3" }}>
                 <button id="add_ingredient" name="add_ingredient" type="button" class="btn btn-primary" onclick="addIngredient()">Add Ingredient</button><br>
 
-                <label for="recipe_steps" class="form-label">Recipe Instructions:</label>
-                <textarea id="recipe_steps" name="recipe_steps" class="form-control" required>{{ recipe.steps|default:"" }}</textarea><br>
+
+                <label for="steps" class="form-label">Step-by-Step Instructions</label>
+                <div id="steps">{% for step in recipe.steps_list.all %}
+                    <div><div class="row">
+                        <div class="col"><input type="text" id="step{{forloop.counter0}}" name="step{{forloop.counter0}}" class="form-control" required value="{{step.text}}"></div>
+                        <div class="col-2 d-flex justify-content-end"><button id="deletestep{{forloop.counter0}}" type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-trigger="click"
+                            title="You must have at least one step" onclick="deleteStep({{forloop.counter0}})">Delete Step</button></div>
+                    </div><br></div>
+                {% empty %}
+                    <div><div class="row">
+                        <div class="col"><input type="text" id="step0" name="step0" class="form-control" required></div>
+                        <div class="col-2 d-flex justify-content-end"><button id="deletestep0" type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-trigger="click"
+                            title="You must have at least one step" onclick="deleteStep(0)">Delete Step</button></div>
+                    </div><br></div>
+                    <div><div class="row">
+                        <div class="col"><input type="text" id="step1" name="step1" class="form-control" required></div>
+                        <div class="col-2 d-flex justify-content-end"><button id="deletestep1" type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-trigger="click"
+                            title="You must have at least one step" onclick="deleteStep(1)">Delete Step</button></div>
+                    </div><br></div>
+                    <div><div class="row">
+                        <div class="col"><input type="text" id="step2" name="step2" class="form-control" required></div>
+                        <div class="col-2 d-flex justify-content-end"><button id="deletestep2" type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-trigger="click"
+                            title="You must have at least one step" onclick="deleteStep(2)">Delete Step</button></div>
+                    </div><br></div>
+                {% endfor %}</div>
+                <input type="hidden" id="step_count" name="step_count" value={{ recipe.steps_list.all.count|default:"3" }}>
+                <button id="add_step" name="add_step" type="button" class="btn btn-primary" onclick="addStep()">Add Step</button><br>
 
                 <label for="recipe_image"> Choose Picture (optional): </label>
                 <input type="file" id="recipe_image" name="recipe_image" accept=".jpg, .jpeg, .png"> 
