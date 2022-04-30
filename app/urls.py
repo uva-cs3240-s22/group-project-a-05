@@ -14,5 +14,5 @@ urlpatterns = [
     path('submit_fork/<int:recipe_id>', views.submit_fork,      name='submit_fork'),
     path('searchbar',                   views.searchbar,        name='searchbar'),
     path('submit_comment/<int:recipe_id>', views.submit_comment, name='submit_comment'),
-    path('delete/comment/<int:comment_id>', views.delete_comment, name='delete_comment'),
+    path('delete_comment/<int:comment_id>', views.delete_comment, name='delete_comment'),
 ]

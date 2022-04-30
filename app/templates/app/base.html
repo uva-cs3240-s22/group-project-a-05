@@ -2,7 +2,7 @@
 {% load bootstrap5 %}
 
 {% block bootstrap5_extra_head %}<script>
-    function like(recipe_id) {
+    function like (recipe_id) {
         fetch(`/like/${recipe_id}`).then(response => {
             if (response.ok) {
                 button = document.getElementById(`like${recipe_id}`);
@@ -17,7 +17,7 @@
         })
     }
 
-    function unlike(recipe_id) {
+    function unlike (recipe_id) {
         fetch(`/unlike/${recipe_id}`).then(response => {
             if (response.ok) {
                 button = document.getElementById(`unlike${recipe_id}`);
