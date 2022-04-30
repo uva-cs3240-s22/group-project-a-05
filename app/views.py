@@ -70,7 +70,7 @@ def submit_recipe(request):
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
-            if not(recipename and recipetime and recipedescription and ingredients and steps):
+            if not(recipename and recipetime and recipedescription and ingredients and steps and recipeimage):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
             recipe=Recipe(author=request.user, name=recipename, description=recipedescription,
                             time=recipetime, image=recipeimage)
@@ -118,7 +118,7 @@ def submit_fork(request, recipe_id):
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
-            if not(recipename and recipetime and recipedescription and ingredients and steps):
+            if not(recipename and recipetime and recipedescription and ingredients and steps and recipeimage):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
             recipe=Recipe(author=request.user, name=recipename, description=recipedescription,
                             time=recipetime, image=recipeimage, forked_from=parent_recipe)
