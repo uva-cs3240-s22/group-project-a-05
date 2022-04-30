@@ -7,7 +7,7 @@ class Recipe (models.Model):
     name        = models.CharField(max_length=400)
     description = models.CharField(max_length=1000)
     time        = models.CharField(max_length=400)
-    image       = models.FileField(upload_to='recipe_picture/', null=True)
+    image       = models.FileField(upload_to='recipe_picture/')
 
     author      = models.ForeignKey(authmodels.User, on_delete=models.CASCADE, related_name="posted_recipes")
     forked_from = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, related_name="child_recipes")

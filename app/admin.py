@@ -16,7 +16,6 @@ class RecipeAdmin(admin.ModelAdmin):
         form = super().get_form(request, obj, **kwargs)
         form.base_fields["user_likes"].required = False
         form.base_fields["forked_from"].required = False
-        form.base_fields["image"].required = False
         return form
 
 admin.site.register(Recipe, RecipeAdmin)
