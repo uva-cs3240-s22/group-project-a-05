@@ -107,7 +107,26 @@
         {% else %}
             <button name="unlike{{recipe.id}}" id="unlike{{recipe.id}}" class='btn btn-danger' onclick="unlike({{recipe.id}})">Unlike</button>
         {% endif %}
-        <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a><br>
+        <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a>
+        {% if recipe.author == user %}
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-recipe-modal">Delete</button>
+            <div class="modal fade" id="delete-recipe-modal" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5>Confirm Delete Recipe</h5>
+                        </div>
+                        <div class="modal-body">
+                            Are you sure you want to delete this recipe? This action cannot be undone.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <a href="{% url 'app:delete_recipe' recipe.id%}" class="btn btn-danger">Delete</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}<br>
     {% endif %}
 
     <p>Time to cook: {{recipe.time }}</p>

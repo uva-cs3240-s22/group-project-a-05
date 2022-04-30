@@ -89,6 +89,12 @@ def submit_recipe(request):
     else:
         return HttpResponseRedirect(reverse('app:create_recipe'))
 
+def delete_recipe(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    if request.user.is_authenticated and recipe.author == request.user:
+        recipe.delete()
+    return HttpResponseRedirect(reverse('app:profile'))
+
 def profile(request):
     posted_recipes = request.user.posted_recipes.filter(forked_from=None)
     forked_recipes = request.user.posted_recipes.exclude(forked_from=None)
