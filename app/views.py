@@ -138,10 +138,6 @@ def submit_fork(request, recipe_id):
     else:
         return HttpResponseRedirect(reverse('app:fork', kwargs={'recipe_id': recipe_id}))
 
-def comment(request, recipe_id):
-    recipe = get_object_or_404(Recipe, pk=recipe_id)
-    return render(request, "app/create_comment.html", {'recipe': recipe})
-
 def submit_comment(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
 
