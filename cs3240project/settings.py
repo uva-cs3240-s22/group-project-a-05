@@ -131,6 +131,9 @@ ACCOUNT_AUTHENTICATION_METHOD = "username_email"
 # don't require email verification
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
+# skip intermediate login page
+SOCIALACCOUNT_LOGIN_ON_GET = True
+
 # Internationalization
 # https://docs.djangoproject.com/en/2.1/topics/i18n/
 

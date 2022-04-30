@@ -7,7 +7,6 @@ class Recipe (models.Model):
     name        = models.CharField(max_length=400)
     description = models.CharField(max_length=1000)
     time        = models.CharField(max_length=400)
-    steps       = models.CharField(max_length=2000)
     image       = models.FileField(upload_to='recipe_picture/', null=True)
 
     author      = models.ForeignKey(authmodels.User, on_delete=models.CASCADE, related_name="posted_recipes")
@@ -30,6 +29,16 @@ class Ingredient (models.Model):
     def __str__(self):
         return self.name
 
+
+class Step (models.Model):
+    recipe  = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='steps_list')
+    text    = models.CharField(max_length=500)
+
+    class Meta:
+        order_with_respect_to = 'recipe'
+    
+    def __str__(self):
+        return self.text
 
 class Comment(models.Model):
     author          = models.ForeignKey(authmodels.User, on_delete=models.CASCADE, related_name="comments")

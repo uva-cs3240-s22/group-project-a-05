@@ -9,9 +9,9 @@ class DummyTest(TestCase):
         self.assertTrue(True)
 
 class recipeTest(TestCase):
-    def create_recipe(self, name="Chicken", description="Roasted Chicken", ing=[], time="30 minutes", steps="1. Roast Chicken 2. Enjoy"):
+    def create_recipe(self, name="Chicken", description="Roasted Chicken", ing=[], time="30 minutes"):
         test_user = User.objects.create(username='test user')
-        recipe = Recipe.objects.create(name=name, description=description, time=time, steps=steps, author=test_user)
+        recipe = Recipe.objects.create(name=name, description=description, time=time, author=test_user)
         for ingredient in ing:
             Ingredient.objects.create(recipe=recipe, name=ingredient['name'], amount=ingredient['amount'], units=ingredient['units'])
         return recipe
@@ -28,7 +28,6 @@ class recipeTest(TestCase):
         self.assertEqual(1, rep.ingredients.all()[1].amount)
         self.assertEqual("some", rep.ingredients.all()[1].units)
         self.assertEqual("30 minutes", rep.time)
-        self.assertEqual("1. Roast Chicken 2. Enjoy", rep.steps)
 
     def test_create_recipe_view(self):
         client = Client()
@@ -49,7 +48,7 @@ class recipeTest(TestCase):
     def test_user_profile_view(self):
         client=Client()
         test_user = User.objects.create(username='test user')
-        rep=Recipe.objects.create(name="Chick", description="des", time="1", steps="steps", author=test_user)
+        rep=Recipe.objects.create(name="Chick", description="des", time="1", author=test_user)
         client.force_login(test_user)
         res=client.get('/profile')
         self.assertTemplateUsed(res, "app/userprofile.html")
@@ -70,7 +69,7 @@ class recipeTest(TestCase):
         client=Client()
         req=client.get(reverse('app:index'))
         req.test_user = User.objects.create(username='test user')
-        rep= Recipe.objects.create(name="Chick", description="des", time="1", steps="steps", author=req.test_user)
+        rep= Recipe.objects.create(name="Chick", description="des", time="1", author=req.test_user)
         client.force_login(req.test_user)
         rep.author.liked_recipes.add(rep)
         res=client.get("/profile")
@@ -80,7 +79,7 @@ class recipeTest(TestCase):
         client=Client()
         req=client.get(reverse('app:index'))
         req.test_user = User.objects.create(username='test user')
-        rep= Recipe.objects.create(name="Chick", description="des", time="1", steps="steps", author=req.test_user)
+        rep= Recipe.objects.create(name="Chick", description="des", time="1", author=req.test_user)
         client.force_login(req.test_user)
         res=client.get("/profile")
         self.assertContains(res, rep)
@@ -89,7 +88,7 @@ class recipeTest(TestCase):
         client=Client()
         req=client.get(reverse('app:index'))
         req.test_user = User.objects.create(username='test user')
-        rep= Recipe.objects.create(name="Chick", description="des", time="1", steps="steps", author=req.test_user)
+        rep= Recipe.objects.create(name="Chick", description="des", time="1", author=req.test_user)
         client.force_login(req.test_user)
         com=Comment.objects.create(author=req.test_user, comment_text="Hi", recipe=rep)
         self.assertEquals("Hi", com.comment_text)
@@ -100,7 +99,7 @@ class recipeTest(TestCase):
         client=Client()
         req=client.get(reverse('app:index'))
         req.test_user = User.objects.create(username='test user')
-        rep= Recipe.objects.create(name="Chick", description="des", time="1", steps="steps", author=req.test_user)
+        rep= Recipe.objects.create(name="Chick", description="des", time="1", author=req.test_user)
         client.force_login(req.test_user)
         com=Comment.objects.create(author=req.test_user, comment_text="Hi", recipe=rep)
         res=client.get("/detail/1")
@@ -111,8 +110,8 @@ class recipeTest(TestCase):
         req=client.get(reverse('app:index'))
         req.test_user = User.objects.create(username='test user')
         req.test_user2 = User.objects.create(username='test user two')
-        rep= Recipe.objects.create(name="Chick", description="des", time="1", steps="steps", author=req.test_user)
-        rep2=Recipe.objects.create(name="Meat", description="des", time="1", steps="steps", author=req.test_user2)
+        rep= Recipe.objects.create(name="Chick", description="des", time="1", author=req.test_user)
+        rep2=Recipe.objects.create(name="Meat", description="des", time="1", author=req.test_user2)
         client.force_login(req.test_user)
         rep.author.liked_recipes.add(rep2)
         res=client.get("/profile")
@@ -125,7 +124,7 @@ class recipeTest(TestCase):
         client=Client()
         req=client.get(reverse('app:index'))
         req.test_user = User.objects.create(username='test user')
-        rep= Recipe.objects.create(name="Chick", description="des", time="1", steps="steps", author=req.test_user)
+        rep= Recipe.objects.create(name="Chick", description="des", time="1", author=req.test_user)
         client.force_login(req.test_user)
         com=Comment.objects.create(author=req.test_user, comment_text="Hi", recipe=rep)
         res=client.get("/detail/1")
