@@ -3,8 +3,10 @@
 
 {% block scripts %}
 {{ ingredients_amounts|json_script:"amounts" }}
+{{ recipe_id|json_script:"recipe_id"}}
 <script>
     const amounts = JSON.parse(document.getElementById("amounts").textContent)
+    const recipe_id = JSON.parse(document.getElementById("recipe_id").textContent)
 
     function applyScalingFactor() {
         scaling_factor = parseFloat(document.getElementById('scaling-factor').value);
@@ -14,6 +16,61 @@
             html_words = ingredient_element.innerHTML.split(/(\s+)/);
             ingredient_element.innerHTML = scaling_factor*amounts[amounts_index] + html_words.slice(1).join("");
             amounts_index += 1;
+        });
+    }
+
+    function startComment() {
+        document.getElementById("start-comment-region").hidden = true;
+        document.getElementById("comment-region").hidden = false;
+    }
+
+    function cancelComment() {
+        document.getElementById("start-comment-region").hidden = false;
+        document.getElementById("comment-region").hidden = true;
+    }
+
+    function submitComment() {
+        fetch(`/submit_comment/${recipe_id}`, {
+            method: 'POST',
+            body: JSON.stringify({
+                'comment': document.getElementById("commentbox").value
+            }),
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+            }
+        }).then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                // can maybe put an error message here but not very important
+            }
+        }).then(response => {
+            let author  = response[1].fields.username;
+            let text    = response[0].fields.comment_text;
+            let id      = response[0].pk;
+            document.getElementById("comments").insertAdjacentHTML("afterbegin", `
+                <p><strong>${author}: </strong> ${text} <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal${id}">Delete</button></p>
+                <div class="modal fade" id="modal${id}" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5>Confirm Delete Comment</h5>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete your comment? This action cannot be undone.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a href="../delete/comment/${id}" class="btn btn-danger"> Delete </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `);
+            document.getElementById('commentbox').value = "";
+            cancelComment();
         });
     }
 </script>{% endblock scripts %}
@@ -63,7 +120,14 @@
     {% endfor %}</ol>
 
     <h3>Comments</h3>
-    {% for comment in recipe.comments.all %}
+    <div id="start-comment-region"><button type="button" id="startCommentButton" class="btn btn-primary" onclick="startComment()">Add a Comment</button><br></div>
+    <div id="comment-region" hidden>
+        {% csrf_token %}
+        <textarea name="commentbox" id="commentbox" class="form-control"></textarea><br>
+        <button type="button" id="cancelCommentButton" class="btn btn-secondary" onclick="cancelComment()">Cancel</button>
+        <button type="button" id="submitCommentButton" class="btn btn-primary" onclick="submitComment()">Submit</button><br>
+    </div>
+    <div id="comments">{% for comment in recipe.comments.all %}
         {% if user.is_authenticated and user == comment.author %}
             <p><strong>{{comment.author}}: </strong>{{ comment }} <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal{{comment.id}}">Delete</button></p>
             <div class="modal fade" id="modal{{comment.id}}" tabindex="-1">
@@ -85,7 +149,7 @@
         {% else %}
             <p><strong>{{comment.author}}: </strong>{{ comment }} </p>
         {% endif %}
-    {% endfor %}
+    {% endfor %}</div>
    
 
 {% endblock content %}

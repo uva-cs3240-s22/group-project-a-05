@@ -1,11 +1,13 @@
 from unicodedata import name
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, HttpResponseServerError
 from .models import Recipe, Comment, Ingredient, Step
 from django.db.models import Q,CharField
 from django.db.models.functions import Lower
 CharField.register_lookup(Lower, "lower")
+from django.core import serializers
+import json
 
 # Create your views here.
 def recipe_list(request):
@@ -28,7 +30,7 @@ def searchbar(request):
 def detail(request, recipe_id):
     recipe = get_object_or_404(Recipe, pk=recipe_id)
     ingredients_amounts = [ingredient.amount for ingredient in recipe.ingredients.all()]
-    return render(request, 'app/detail.html', { 'recipe': recipe, 'ingredients_amounts':ingredients_amounts })
+    return render(request, 'app/detail.html', { 'recipe': recipe, 'ingredients_amounts':ingredients_amounts, 'recipe_id':recipe_id })
 
 def like(request, recipe_id):
     if request.user.is_authenticated:
@@ -145,16 +147,16 @@ def submit_comment(request, recipe_id):
 
     if request.user.is_authenticated:
         try:
-            commenttext = request.POST.get("comment")
+            commenttext = json.loads(request.body).get("comment")
         except (KeyError):
             return HttpResponseRedirect(reverse('app:profile'))
         else:
-            if not(commenttext):
-                return HttpResponseRedirect(reverse('app:profile'))
-            comments=Comment(author=request.user, comment_text=commenttext, recipe=recipe)
-            comments.save()
+            if commenttext:
+                comment=Comment(author=request.user, comment_text=commenttext, recipe=recipe)
+                comment.save()
+                return HttpResponse(serializers.serialize('json', [comment, comment.author]))
 
-        return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
+        return HttpResponseServerError()
 
     else:
         return HttpResponseRedirect(reverse('app:comment', kwargs={'recipe_id': recipe_id}))
