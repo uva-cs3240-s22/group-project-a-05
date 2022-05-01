@@ -10,14 +10,17 @@
 
     function applyScalingFactor() {
         scaling_factor = parseFloat(document.getElementById('scaling-factor').value);
-        ingredient_elements = document.querySelectorAll('.ingredient');
-        let amounts_index = 0;
-        ingredient_elements.forEach(ingredient_element => {
-            html_words = ingredient_element.innerHTML.split(/(\s+)/);
-            ingredient_element.innerHTML = scaling_factor*amounts[amounts_index] + html_words.slice(1).join("");
-            amounts_index += 1;
-        });
+        if (!isNaN(scaling_factor)) {
+            ingredient_elements = document.querySelectorAll('.ingredient');
+            let amounts_index = 0;
+            ingredient_elements.forEach(ingredient_element => {
+                html_words = ingredient_element.innerHTML.split(/(\s+)/);
+                ingredient_element.innerHTML = scaling_factor*amounts[amounts_index] + html_words.slice(1).join("");
+                amounts_index += 1;
+            });
+        }
     }
+    window.onload = applyScalingFactor;
 
     function startComment() {
         document.getElementById("start-comment-region").hidden = true;
@@ -134,7 +137,7 @@
     <h3>Ingredients</h3>
     <div class='row'>
         <div class='col-auto'>Serving size (use this to easily scale ingredient amounts up or down): </div>
-        <div class='col-auto'><input type="number" id="scaling-factor" class='form-control' style='width:5em' value=1></div>
+        <div class='col-auto'><input type="number" id="scaling-factor" class='form-control' style='width:5em' value="1" min="0"></div>
         <div class='col-auto'><button type='button' class='btn btn-primary' onclick='applyScalingFactor()'>Apply</button></div>
     </div>
     <ul>{% for ingredient in recipe.ingredients.all %}
