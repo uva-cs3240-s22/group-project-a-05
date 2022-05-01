@@ -6,93 +6,100 @@
     {% if user.is_authenticated %}
         <h1>Welcome, {{ user }}</h1>
 
-        <h2>Your Posted Recipes:</h2>
-        {% if posted_recipes %}
-            <ul class="list-group">
-                {% for recipe in posted_recipes %}
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-3">
-                                {% if recipe.image %}
-                                    <img src= "{{ recipe.image.url }}" style="max-width:100%;max-height:200px">
-                                {% endif %}
+        <div class="mt-4">
+            <h2>Your Posted Recipes:</h2>
+            {% if posted_recipes %}
+                <a href="{% url 'app:create_recipe'%}" class="btn btn-primary mt-2 mb-2">Create a Recipe</a>
+                <ul class="list-group">
+                    {% for recipe in posted_recipes %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-3">
+                                    {% if recipe.image %}
+                                        <img src= "{{ recipe.image.url }}" style="max-width:100%;max-height:200px">
+                                    {% endif %}
+                                </div>
+                                <div class="col">
+                                    <a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a> <br>
+                                    <b>By:</b> {{ recipe.author }}<br>
+                                    <b>Time to Cook: </b>{{ recipe.time }} <br>
+                                    <b>Recipe Description: </b>{{ recipe.description }} <br>
+                                    <b>Ingredients: </b>{% for ingredient in recipe.ingredients.all %}
+                                        {{ingredient.name}}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}<br>
+                                </div>
                             </div>
-                            <div class="col">
-                                <a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a> <br>
-                                <b>By:</b> {{ recipe.author }}<br>
-                                <b>Time to Cook: </b>{{ recipe.time }} <br>
-                                <b>Recipe Description: </b>{{ recipe.description }} <br>
-                                <b>Ingredients: </b>{% for ingredient in recipe.ingredients.all %}
-                                    {{ingredient.name}}{% if not forloop.last %}, {% endif %}
-                                {% endfor %}<br>
-                            </div>
-                        </div>
-                    </li>
-                <br/>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>You haven't posted any recipes yet</p>
-        {% endif %}
-        <a href="{% url 'app:create_recipe'%}" class="btn btn-primary">Create a Recipe</a>
+                        </li>
+                    <br/>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You haven't posted any recipes yet</p>
+                <a href="{% url 'app:create_recipe'%}" class="btn btn-primary">Create a Recipe</a>
+            {% endif %}
+        </div>
 
+        <div class="mt-4">
         <h2>Your Forked Recipes:</h2>
-        {% if forked_recipes %}
-            <ul class="list-group">
-                {% for recipe in forked_recipes %}
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-3">
-                                {% if recipe.image %}
-                                    <img src= "{{ recipe.image.url }}" style="max-width:100%;max-height:200px">
-                                {% endif %}
+            {% if forked_recipes %}
+                <ul class="list-group">
+                    {% for recipe in forked_recipes %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-3">
+                                    {% if recipe.image %}
+                                        <img src= "{{ recipe.image.url }}" style="max-width:100%;max-height:200px">
+                                    {% endif %}
+                                </div>
+                                <div class="col">
+                                    <a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a> <br>
+                                    <b>By:</b> {{ recipe.author }}<br>
+                                    <b>Time to Cook: </b>{{ recipe.time }} <br>
+                                    <b>Recipe Description: </b>{{ recipe.description }} <br>
+                                    <b>Ingredients: </b>{% for ingredient in recipe.ingredients.all %}
+                                        {{ingredient.name}}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}<br>
+                                </div>
                             </div>
-                            <div class="col">
-                                <a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a> <br>
-                                <b>By:</b> {{ recipe.author }}<br>
-                                <b>Time to Cook: </b>{{ recipe.time }} <br>
-                                <b>Recipe Description: </b>{{ recipe.description }} <br>
-                                <b>Ingredients: </b>{% for ingredient in recipe.ingredients.all %}
-                                    {{ingredient.name}}{% if not forloop.last %}, {% endif %}
-                                {% endfor %}<br>
-                            </div>
-                        </div>
-                    </li>
-                <br/>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>You haven't forked any recipes yet</p>
-        {% endif %}
+                        </li>
+                    <br/>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You haven't forked any recipes yet</p>
+            {% endif %}
+        </div>
 
-        <h2>Your Liked Recipes:</h2>
-        {% if user.liked_recipes.all %}
-            <ul class="list-group">
-                {% for recipe in user.liked_recipes.all %}
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-3">
-                                {% if recipe.image %}
-                                    <img src= "{{ recipe.image.url }}" style="max-width:100%;max-height:200px">
-                                {% endif %}
+        <div class="mt-4">
+            <h2>Your Liked Recipes:</h2>
+            {% if user.liked_recipes.all %}
+                <ul class="list-group">
+                    {% for recipe in user.liked_recipes.all %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col-3">
+                                    {% if recipe.image %}
+                                        <img src= "{{ recipe.image.url }}" style="max-width:100%;max-height:200px">
+                                    {% endif %}
+                                </div>
+                                <div class="col">
+                                    <a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a> <br>
+                                    <b>By:</b> {{ recipe.author }}<br>
+                                    <b>Time to Cook: </b>{{ recipe.time }} <br>
+                                    <b>Recipe Description: </b>{{ recipe.description }} <br>
+                                    <b>Ingredients: </b>{% for ingredient in recipe.ingredients.all %}
+                                        {{ingredient.name}}{% if not forloop.last %}, {% endif %}
+                                    {% endfor %}<br>
+                                </div>
                             </div>
-                            <div class="col">
-                                <a href="{% url 'app:detail' recipe.id %}">{{ recipe.name }}</a> <br>
-                                <b>By:</b> {{ recipe.author }}<br>
-                                <b>Time to Cook: </b>{{ recipe.time }} <br>
-                                <b>Recipe Description: </b>{{ recipe.description }} <br>
-                                <b>Ingredients: </b>{% for ingredient in recipe.ingredients.all %}
-                                    {{ingredient.name}}{% if not forloop.last %}, {% endif %}
-                                {% endfor %}<br>
-                            </div>
-                        </div>
-                    </li>
-                <br/>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>You haven't liked any recipes yet</p>
-        {% endif %}
+                        </li>
+                    <br/>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>You haven't liked any recipes yet</p>
+            {% endif %}
+        </div>
 
     {% else %}
         <p>You're not signed in yet</p>
