@@ -108,7 +108,7 @@
         {% if recipe not in user.liked_recipes.all %}
             <button name="like{{recipe.id}}" id="like{{recipe.id}}" class='btn btn-success' onclick="like({{recipe.id}})">Like</button>
         {% else %}
-            <button name="unlike{{recipe.id}}" id="unlike{{recipe.id}}" class='btn btn-danger' onclick="unlike({{recipe.id}})">Unlike</button>
+            <button name="unlike{{recipe.id}}" id="unlike{{recipe.id}}" class='btn btn-secondary' onclick="unlike({{recipe.id}})">Unlike</button>
         {% endif %}
         {% if recipe.author == user %}
             <a href="../edit/{{recipe.id}}" class="btn btn-warning"> Edit</a>

@@ -8,7 +8,7 @@
                 button = document.getElementById(`like${recipe_id}`);
                 button.id      = `unlike${recipe_id}`;
                 button.name    = `unlike${recipe_id}`;
-                button.setAttribute('class', 'btn btn-danger');
+                button.setAttribute('class', 'btn btn-secondary');
                 button.setAttribute('onclick', `unlike(${recipe_id})`);
                 button.innerHTML = 'Unlike';
             } else {
