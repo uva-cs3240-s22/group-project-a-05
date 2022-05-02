@@ -170,4 +170,56 @@ def delete_comment(request, comment_id):
         comment.delete()
     return HttpResponseRedirect(reverse('app:detail', kwargs={'recipe_id': recipe_id}))
 
-    
+
+def edit(request, recipe_id):
+    recipe=Recipe.objects.get(pk=recipe_id)
+    return render(request,'app/edit_recipe.html', {'recipe': recipe})
+
+def submit_edit(request, recipe_id):
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
+    if request.user.is_authenticated:
+        try:
+            recipename          = request.POST.get("recipe_name")
+            recipetime          = request.POST.get("recipe_time")
+            recipedescription   = request.POST.get("recipe_description")
+            recipeimage         = request.FILES.get("recipe_image")
+            ingredients         = []
+            for i in range(int(request.POST['ingredient_count'])):
+                if ("ingredient%s" % i) in request.POST:
+                    ingredients.append({'name':request.POST["ingredient%s"%i], 'amount':request.POST["quantity%s"%i], \
+                                        'units':request.POST['units%s'%i]})
+            steps = []
+            for i in range(int(request.POST['step_count'])):
+                if ("step%s" % i) in request.POST:
+                    steps.append(request.POST["step%s"%i])
+        except (KeyError):
+            return HttpResponseRedirect(reverse('app:create_recipe'))
+        else:
+            if not(recipename and recipetime and recipedescription and ingredients and steps):
+                return HttpResponseRedirect(reverse('app:create_recipe'))
+            recipe.name = recipename
+            recipe.time = recipetime
+            recipe.description = recipedescription
+            if recipeimage:
+                recipe.image = recipeimage
+            
+            # first clear old ingredients and steps (can do this because nothing else refers to them)
+            for ingredient in recipe.ingredients.all():
+                ingredient.delete()
+            for step in recipe.steps_list.all():
+                step.delete()
+            ingredients = [Ingredient(recipe=recipe, name=ingredient['name'], amount=ingredient['amount'], \
+                                        units=ingredient['units']) for ingredient in ingredients]
+            steps = [Step(recipe=recipe, text=step) for step in steps]
+
+            # wait until everything has been created successfully before saving anything
+            recipe.save()
+            for ingredient in ingredients:
+                ingredient.save()
+            for step in steps:
+                step.save()
+
+        return HttpResponseRedirect(reverse('app:profile'))
+
+    else:
+        return HttpResponseRedirect(reverse('app:edit', kwargs={'recipe_id': recipe_id}))
