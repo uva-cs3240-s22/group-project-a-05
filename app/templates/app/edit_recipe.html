@@ -1,0 +1,5 @@
+{% extends 'app/abstract_creation.html' %}
+{% load bootstrap5 %}
+
+{% block submit_url %}{% url 'app:submit_edit' recipe.id %}{% endblock submit_url %}
+{% block not_signed_in_message %}Please sign in first to edit a recipe{% endblock not_signed_in_message %}
