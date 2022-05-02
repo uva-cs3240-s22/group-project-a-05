@@ -20,7 +20,10 @@
             });
         }
     }
-    window.onload = applyScalingFactor;
+    window.addEventListener('load', (event) => {
+        applyScalingFactor();
+        initializeTooltips();
+    })
 
     function startComment() {
         document.getElementById("start-comment-region").hidden = true;
@@ -92,7 +95,18 @@
 
 {% block bootstrap5_title %}A-05 Project Recipe Detail{% endblock bootstrap5_title %}
 {% block content %}
-    <h2>{{ recipe.name }}</h2>
+    <h2>
+        {{ recipe.name }}
+        {% if user.is_authenticated %}
+            {% if recipe not in user.liked_recipes.all %}
+                <i name="like{{recipe.id}}" id="like{{recipe.id}}" class='bi bi-bookmark-heart' onclick="like({{recipe.id}})"
+                    data-bs-toggle="tooltip" data-bs-trigger="hover" title="Add this recipe to your liked recipes"></i>
+            {% else %}
+                <i name="like{{recipe.id}}" id="like{{recipe.id}}" class='bi bi-bookmark-heart-fill' onclick="unlike({{recipe.id}})")
+                    data-bs-toggle="tooltip" data-bs-trigger="hover" title="Remove this recipe from your liked recipes""></i>
+            {% endif %}
+        {% endif %}
+    </h2>
     {% if recipe.image %}
         <img src= "{{ recipe.image.url }}" style="max-width:100%;max-height:400px">
     {% endif %}
@@ -105,11 +119,6 @@
     </p>
 
     {% if user.is_authenticated %}
-        {% if recipe not in user.liked_recipes.all %}
-            <button name="like{{recipe.id}}" id="like{{recipe.id}}" class='btn btn-success' onclick="like({{recipe.id}})">Like</button>
-        {% else %}
-            <button name="unlike{{recipe.id}}" id="unlike{{recipe.id}}" class='btn btn-danger' onclick="unlike({{recipe.id}})">Unlike</button>
-        {% endif %}
         <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a>
         {% if recipe.author == user %}
             <a href="../edit/{{recipe.id}}" class="btn btn-warning"> Edit</a>
