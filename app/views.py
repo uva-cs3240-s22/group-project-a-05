@@ -195,12 +195,13 @@ def submit_edit(request, recipe_id):
         except (KeyError):
             return HttpResponseRedirect(reverse('app:create_recipe'))
         else:
-            if not(recipename and recipetime and recipedescription and ingredients and steps and recipeimage):
+            if not(recipename and recipetime and recipedescription and ingredients and steps):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
             recipe.name = recipename
             recipe.time = recipetime
             recipe.description = recipedescription
-            recipe.image = recipeimage
+            if recipeimage:
+                recipe.image = recipeimage
             ingredients = [Ingredient(recipe=recipe, name=ingredient['name'], amount=ingredient['amount'], \
                                         units=ingredient['units']) for ingredient in ingredients]
             steps = [Step(recipe=recipe, text=step) for step in steps]
