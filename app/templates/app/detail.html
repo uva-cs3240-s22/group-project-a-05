@@ -110,7 +110,6 @@
         {% else %}
             <button name="unlike{{recipe.id}}" id="unlike{{recipe.id}}" class='btn btn-danger' onclick="unlike({{recipe.id}})">Unlike</button>
         {% endif %}
-        <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a>
         {% if recipe.author == user %}
             <a href="../edit/{{recipe.id}}" class="btn btn-warning"> Edit</a>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-recipe-modal">Delete</button>
@@ -130,8 +129,10 @@
                     </div>
                 </div>
             </div>
-        {% endif %}<br>
+        {% endif %}<br><br>
+        <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork: copy and modify recipe</a><br><br>
     {% endif %}
+    
 
     <p>Time to cook: {{recipe.time }}</p>
 
