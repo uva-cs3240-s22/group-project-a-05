@@ -176,7 +176,7 @@ def edit(request, recipe_id):
     return render(request,'app/edit_recipe.html', {'recipe': recipe})
 
 def submit_edit(request, recipe_id):
-    old_recipe = get_object_or_404(Recipe, pk=recipe_id)
+    recipe = get_object_or_404(Recipe, pk=recipe_id)
     if request.user.is_authenticated:
         try:
             recipename          = request.POST.get("recipe_name")
@@ -197,12 +197,10 @@ def submit_edit(request, recipe_id):
         else:
             if not(recipename and recipetime and recipedescription and ingredients and steps and recipeimage):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
-            if (old_recipe.forked_from):
-                recipe=Recipe(author=request.user, name=recipename, description=recipedescription,
-                            time=recipetime, image=recipeimage, forked_from=old_recipe.forked_from)
-            else:
-                recipe=Recipe(author=request.user, name=recipename, description=recipedescription,
-                            time=recipetime, image=recipeimage)
+            recipe.name = recipename
+            recipe.time = recipetime
+            recipe.description = recipedescription
+            recipe.image = recipeimage
             ingredients = [Ingredient(recipe=recipe, name=ingredient['name'], amount=ingredient['amount'], \
                                         units=ingredient['units']) for ingredient in ingredients]
             steps = [Step(recipe=recipe, text=step) for step in steps]
@@ -213,7 +211,6 @@ def submit_edit(request, recipe_id):
                 ingredient.save()
             for step in steps:
                 step.save()
-            old_recipe.delete() 
 
         return HttpResponseRedirect(reverse('app:profile'))
 
