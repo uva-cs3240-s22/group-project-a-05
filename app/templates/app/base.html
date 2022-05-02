@@ -4,14 +4,16 @@
 {% block bootstrap5_extra_head %}
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 <script>
+    window.onload = initializeTooltips;
     function like (recipe_id) {
         fetch(`/like/${recipe_id}`).then(response => {
             if (response.ok) {
-                button = document.getElementById(`like${recipe_id}`);
-                button.setAttribute('class', 'bi bi-bookmark-heart-fill');
-                button.setAttribute('onclick', `unlike(${recipe_id})`);
-                button.setAttribute('title', 'Remove this recipe from your liked recipes');
-                bootstrap.Tooltip.getInstance(button).hide();
+                document.querySelectorAll(`#like${recipe_id}`).forEach(button => {
+                    button.setAttribute('class', 'bi bi-bookmark-heart-fill');
+                    button.setAttribute('onclick', `unlike(${recipe_id})`);
+                    button.setAttribute('title', 'Remove this recipe from your liked recipes');
+                    bootstrap.Tooltip.getInstance(button).hide();
+                });
                 initializeTooltips();
             } else {
                 // can maybe put an error message here but not very important
@@ -22,11 +24,12 @@
     function unlike (recipe_id) {
         fetch(`/unlike/${recipe_id}`).then(response => {
             if (response.ok) {
-                button = document.getElementById(`like${recipe_id}`);
-                button.setAttribute('class', 'bi bi-bookmark-heart');
-                button.setAttribute('onclick', `like(${recipe_id})`);
-                button.setAttribute('title', 'Add this recipe to your liked recipes');
-                bootstrap.Tooltip.getInstance(button).hide();
+                document.querySelectorAll(`#like${recipe_id}`).forEach(button => { 
+                    button.setAttribute('class', 'bi bi-bookmark-heart');
+                    button.setAttribute('onclick', `like(${recipe_id})`);
+                    button.setAttribute('title', 'Add this recipe to your liked recipes');
+                    bootstrap.Tooltip.getInstance(button).hide();
+                });
                 initializeTooltips();
             } else {
                 // can maybe put an error message here but not very important
