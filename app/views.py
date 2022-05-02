@@ -202,6 +202,12 @@ def submit_edit(request, recipe_id):
             recipe.description = recipedescription
             if recipeimage:
                 recipe.image = recipeimage
+            
+            # first clear old ingredients and steps (can do this because nothing else refers to them)
+            for ingredient in recipe.ingredients.all():
+                ingredient.delete()
+            for step in recipe.steps_list.all():
+                step.delete()
             ingredients = [Ingredient(recipe=recipe, name=ingredient['name'], amount=ingredient['amount'], \
                                         units=ingredient['units']) for ingredient in ingredients]
             steps = [Step(recipe=recipe, text=step) for step in steps]
