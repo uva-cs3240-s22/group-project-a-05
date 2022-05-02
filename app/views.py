@@ -197,7 +197,11 @@ def submit_edit(request, recipe_id):
         else:
             if not(recipename and recipetime and recipedescription and ingredients and steps and recipeimage):
                 return HttpResponseRedirect(reverse('app:create_recipe'))
-            recipe=Recipe(author=request.user, name=recipename, description=recipedescription,
+            if (old_recipe.forked_from):
+                recipe=Recipe(author=request.user, name=recipename, description=recipedescription,
+                            time=recipetime, image=recipeimage, forked_from=old_recipe.forked_from)
+            else:
+                recipe=Recipe(author=request.user, name=recipename, description=recipedescription,
                             time=recipetime, image=recipeimage)
             ingredients = [Ingredient(recipe=recipe, name=ingredient['name'], amount=ingredient['amount'], \
                                         units=ingredient['units']) for ingredient in ingredients]

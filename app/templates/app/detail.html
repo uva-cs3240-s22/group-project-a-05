@@ -112,7 +112,7 @@
         {% endif %}
         <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a>
         {% if recipe.author == user %}
-            <a href="../edit/{{recipe.id}}" class="btn btn-warning"> Edit</a><br>
+            <a href="../edit/{{recipe.id}}" class="btn btn-warning"> Edit</a>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-recipe-modal">Delete</button>
             <div class="modal fade" id="delete-recipe-modal" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
