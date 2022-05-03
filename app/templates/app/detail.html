@@ -20,7 +20,9 @@
             });
         }
     }
-    window.onload = applyScalingFactor;
+    window.addEventListener('load', (event) => {
+        applyScalingFactor();
+    })
 
     function startComment() {
         document.getElementById("start-comment-region").hidden = true;
@@ -54,7 +56,7 @@
             let text    = response[0].fields.comment_text;
             let id      = response[0].pk;
             document.getElementById("comments").insertAdjacentHTML("afterbegin", `
-                <div id="comment${id}">
+                <li id="comment${id}">
                     <p><strong>${author}: </strong> ${text} <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal${id}">Delete</button></p>
                     <div class="modal fade" id="modal${id}" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
@@ -72,7 +74,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </li>
             `);
             document.getElementById('commentbox').value = "";
             cancelComment();
@@ -92,67 +94,71 @@
 
 {% block bootstrap5_title %}A-05 Project Recipe Detail{% endblock bootstrap5_title %}
 {% block content %}
-    <h2>{{ recipe.name }}</h2>
-    {% if recipe.image %}
-        <img src= "{{ recipe.image.url }}" style="max-width:100%;max-height:400px">
-    {% endif %}
-    
-    <p>
-        By: {{ recipe.author }}<br>
+    <h2 class='mt-3'>
+        {{ recipe.name }}
+        {% if user.is_authenticated %}
+            {% if recipe not in user.liked_recipes.all %}
+                <i name="like{{recipe.id}}" id="like{{recipe.id}}" class='bi bi-bookmark-heart' onclick="like({{recipe.id}})"
+                    data-bs-toggle="tooltip" data-bs-trigger="hover" title="Add this recipe to your liked recipes"></i>
+            {% else %}
+                <i name="like{{recipe.id}}" id="like{{recipe.id}}" class='bi bi-bookmark-heart-fill' onclick="unlike({{recipe.id}})")
+                    data-bs-toggle="tooltip" data-bs-trigger="hover" title="Remove this recipe from your liked recipes"></i>
+            {% endif %}
+        {% endif %}
+    </h2>
+    <h5>By: {{ recipe.author }}</h5>
+    <h5>Time to cook: {{recipe.time}}</h5>
+    <h5>
         {% if recipe.forked_from %}
-            Forked from: <a href = "/detail/{{recipe.forked_from.id}}" >{{recipe.forked_from.name}} </a>
+            Modified from: <a href = "/detail/{{recipe.forked_from.id}}" >{{recipe.forked_from.name}} </a>
         {% endif %}
-    </p>
-
+    </h5>
     {% if user.is_authenticated %}
-        {% if recipe not in user.liked_recipes.all %}
-            <button name="like{{recipe.id}}" id="like{{recipe.id}}" class='btn btn-success' onclick="like({{recipe.id}})">Like</button>
-        {% else %}
-            <button name="unlike{{recipe.id}}" id="unlike{{recipe.id}}" class='btn btn-secondary' onclick="unlike({{recipe.id}})">Unlike</button>
-        {% endif %}
-        {% if recipe.author == user %}
-            <a href="../edit/{{recipe.id}}" class="btn btn-warning"> Edit</a>
-            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-recipe-modal">Delete</button>
-            <div class="modal fade" id="delete-recipe-modal" tabindex="-1">
+        <div class="mb-2">
+            <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a>
+            <button type="button" data-bs-toggle="modal" data-bs-target="#forkingmodal" class="btn btn-info">What's this?</button><br><br>
+            <div class="modal fade" id="forkingmodal" tabindex="-1">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5>Confirm Delete Recipe</h5>
+                            <h5>Everything You Ever Wanted To Know About Forking</h5>
                         </div>
                         <div class="modal-body">
-                            Are you sure you want to delete this recipe? This action cannot be undone.
+                            Forking lets you modify a copy of a previously created recipe and save it as your own. <br>
+                            For Example: With forking, you can easily turn steak stir fry into tofu stir fry.<br>
+                            :)
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <a href="{% url 'app:delete_recipe' recipe.id%}" class="btn btn-danger">Delete</a>
+                            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
                         </div>
                     </div>
                 </div>
             </div>
-        {% endif %}
-        <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a>
-        <button type="button" data-bs-toggle="modal" data-bs-target="#forkingmodal" class="btn btn-info">What's this?</button><br><br>
-        <div class="modal fade" id="forkingmodal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5>Everything You Ever Wanted To Know About Forking</h5>
-                    </div>
-                    <div class="modal-body">
-                        Forking lets you modify a copy of a previously created recipe and save it as your own. <br>
-                        For Example: With forking, you can easily turn steak stir fry into tofu stir fry.<br>
-                        :)
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+            {% if recipe.author == user %}
+                <a href="../edit/{{recipe.id}}" class="btn btn-warning"> Edit</a>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-recipe-modal">Delete</button>
+                <div class="modal fade" id="delete-recipe-modal" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5>Confirm Delete Recipe</h5>
+                            </div>
+                            <div class="modal-body">
+                                Are you sure you want to delete this recipe? This action cannot be undone.
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <a href="{% url 'app:delete_recipe' recipe.id%}" class="btn btn-danger">Delete</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            {% endif %}<br>
         </div>
     {% endif %}
-    
-
-    <p>Time to cook: {{recipe.time }}</p>
+    {% if recipe.image %}
+        <img src= "{{ recipe.image.url }}" style="max-width:100%;max-height:400px"><br>
+    {% endif %}
 
     <h3>Ingredients</h3>
     <div class='row'>
@@ -173,17 +179,19 @@
     {% endfor %}</ol>
 
     <h3>Comments</h3>
-    <div id="start-comment-region"><button type="button" id="startCommentButton" class="btn btn-primary" onclick="startComment()">Add a Comment</button><br></div>
+    <div id="start-comment-region"><button type="button" id="startCommentButton" class="btn btn-primary" onclick="startComment()">Add a Comment</button></div>
     <div id="comment-region" hidden>
         {% csrf_token %}
         <textarea name="commentbox" id="commentbox" class="form-control"></textarea><br>
         <button type="button" id="cancelCommentButton" class="btn btn-secondary" onclick="cancelComment()">Cancel</button>
-        <button type="button" id="submitCommentButton" class="btn btn-primary" onclick="submitComment()">Submit</button><br>
-    </div>
-    <div id="comments">{% for comment in recipe.comments.all %}
-        <div id="comment{{comment.id}}">
+        <button type="button" id="submitCommentButton" class="btn btn-primary" onclick="submitComment()">Submit</button>
+    </div><br>
+    <ul id="comments" class="list-group">{% for comment in recipe.comments.all %}
+        <li id="comment{{comment.id}}" class="list-group-item">
             {% if user.is_authenticated and user == comment.author %}
-                <p><strong>{{comment.author}}: </strong>{{ comment }} <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal{{comment.id}}">Delete</button></p>
+                <h5 style="text-decoration: underline">{{ comment.author }}</h5>
+                <p>{{ comment }}</p>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal{{comment.id}}">Delete</button></p>
                 <div class="modal fade" id="modal{{comment.id}}" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
@@ -203,8 +211,8 @@
             {% else %}
                 <p><strong>{{comment.author}}: </strong>{{ comment }} </p>
             {% endif %}
-        </div>
-    {% endfor %}</div>
-   
+        </li>
+    {% endfor %}</ul>
+
 
 {% endblock content %}
