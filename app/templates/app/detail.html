@@ -56,8 +56,10 @@
             let text    = response[0].fields.comment_text;
             let id      = response[0].pk;
             document.getElementById("comments").insertAdjacentHTML("afterbegin", `
-                <li id="comment${id}">
-                    <p><strong>${author}: </strong> ${text} <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal${id}">Delete</button></p>
+                <li id="comment${id}" class="list-group-item">
+                    <h5 style="text-decoration: underline">${author}</h5> 
+                    <p>${text}</p>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal${id}">Delete</button>
                     <div class="modal fade" id="modal${id}" tabindex="-1">
                         <div class="modal-dialog modal-dialog-centered">
                             <div class="modal-content">
@@ -188,9 +190,9 @@
     </div><br>
     <ul id="comments" class="list-group">{% for comment in recipe.comments.all %}
         <li id="comment{{comment.id}}" class="list-group-item">
+            <h5 style="text-decoration: underline">{{ comment.author }}</h5>
+            <p>{{ comment }}</p>
             {% if user.is_authenticated and user == comment.author %}
-                <h5 style="text-decoration: underline">{{ comment.author }}</h5>
-                <p>{{ comment }}</p>
                 <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#modal{{comment.id}}">Delete</button></p>
                 <div class="modal fade" id="modal{{comment.id}}" tabindex="-1">
                     <div class="modal-dialog modal-dialog-centered">
@@ -208,8 +210,6 @@
                         </div>
                     </div>
                 </div>
-            {% else %}
-                <p><strong>{{comment.author}}: </strong>{{ comment }} </p>
             {% endif %}
         </li>
     {% endfor %}</ul>
