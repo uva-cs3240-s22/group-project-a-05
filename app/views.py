@@ -223,3 +223,6 @@ def submit_edit(request, recipe_id):
 
     else:
         return HttpResponseRedirect(reverse('app:edit', kwargs={'recipe_id': recipe_id}))
+
+def about_fork(request):
+    return render(request, 'app/about_fork.html')
