@@ -108,9 +108,8 @@
         {% if recipe not in user.liked_recipes.all %}
             <button name="like{{recipe.id}}" id="like{{recipe.id}}" class='btn btn-success' onclick="like({{recipe.id}})">Like</button>
         {% else %}
-            <button name="unlike{{recipe.id}}" id="unlike{{recipe.id}}" class='btn btn-danger' onclick="unlike({{recipe.id}})">Unlike</button>
+            <button name="unlike{{recipe.id}}" id="unlike{{recipe.id}}" class='btn btn-secondary' onclick="unlike({{recipe.id}})">Unlike</button>
         {% endif %}
-        <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a>
         {% if recipe.author == user %}
             <a href="../edit/{{recipe.id}}" class="btn btn-warning"> Edit</a>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#delete-recipe-modal">Delete</button>
@@ -130,8 +129,28 @@
                     </div>
                 </div>
             </div>
-        {% endif %}<br>
+        {% endif %}
+        <a href="../fork/{{recipe.id}}" class="btn btn-info"> Fork</a>
+        <button type="button" data-bs-toggle="modal" data-bs-target="#forkingmodal" class="btn btn-info">What's this?</button><br><br>
+        <div class="modal fade" id="forkingmodal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Everything You Ever Wanted To Know About Forking</h5>
+                    </div>
+                    <div class="modal-body">
+                        Forking lets you modify a copy of a previously created recipe and save it as your own. <br>
+                        For Example: With forking, you can easily turn steak stir fry into tofu stir fry.<br>
+                        :)
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Got it!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     {% endif %}
+    
 
     <p>Time to cook: {{recipe.time }}</p>
 

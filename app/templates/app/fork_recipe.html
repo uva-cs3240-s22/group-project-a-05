@@ -1,5 +1,11 @@
 {% extends 'app/abstract_creation.html' %}
 {% load bootstrap5 %}
 
+{% block intro %}
+    <h3>Fork a Recipe</h3>
+    <p>These values are all taken from the original recipe. Feel free to change anything you like,
+        then hit post to make a modified version!
+    </p>
+{% endblock intro %}
 {% block submit_url %}{% url 'app:submit_fork' recipe.id %}{% endblock submit_url %}
 {% block not_signed_in_message %}Please sign in first to fork a recipe{% endblock not_signed_in_message %}

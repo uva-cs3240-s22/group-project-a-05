@@ -107,6 +107,7 @@
 
 {% block content %}
     {% if user.is_authenticated %}
+        {% block intro %}{% endblock intro %}
         <form action="{% block submit_url %}{% endblock submit_url %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <fieldset>
@@ -130,7 +131,7 @@
                 <div id="ingredients">{% for ingredient in recipe.ingredients.all %}
                     <div><div class="row">
                         <div class="col"><input   id="ingredient{{forloop.counter0}}" name="ingredient{{forloop.counter0}}" type="text" class="form-control" required value="{{ingredient.name}}"></div>
-                        <div class="col-1"><input id="quantity{{forloop.counter0}}"   name="quantity{{forloop.counter0}}" type="number" class="form-control" required value="{{ingredient.amount}}"></div>
+                        <div class="col-1"><input id="quantity{{forloop.counter0}}"   name="quantity{{forloop.counter0}}" type="number" step = ".01" class="form-control" required value="{{ingredient.amount}}"></div>
                         <div class="col-2"><input id="units{{forloop.counter0}}"      name="units{{forloop.counter0}}"      type="text" class="form-control" required value="{{ingredient.units}}"></div>
                         <div class="col-2 d-flex justify-content-end"><button id="delete{{forloop.counter0}}" type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-trigger="click"
                             title="You must have at least one ingredient" onclick="deleteIngredient({{forloop.counter0}})">Delete Ingredient</button></div>
@@ -138,22 +139,22 @@
                 {% empty %}
                     <div><div class="row">
                         <div class="col"><input id="ingredient0" name="ingredient0" type="text" class="form-control" required></div>
-                        <div class="col-1"><input id="quantity0" name="quantity0" type="number" class="form-control" required></div>
-                        <div class="col-2"><input id="units0" name="units0" type="text" class="form-control" required></div>
+                        <div class="col-1"><input id="quantity0" name="quantity0" type="number" step = ".01" class="form-control" required></div>
+                        <div class="col-2"><input id="units0" name="units0" type="text" class="form-control" ></div>
                         <div class="col-2 d-flex justify-content-end"><button id="delete0" type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-trigger="click"
                             title="You must have at least one ingredient" onclick="deleteIngredient(0)">Delete Ingredient</button></div>
                     </div><br></div>
                     <div><div class="row">
                         <div class="col"><input id="ingredient1" name="ingredient1" type="text" class="form-control" required></div>
-                        <div class="col-1"><input id="quantity1" name="quantity1" type="number" class="form-control" required></div>
-                        <div class="col-2"><input id="units1" name="units1" type="text" class="form-control" required></div>
+                        <div class="col-1"><input id="quantity1" name="quantity1" type="number" step = ".01" class="form-control" required></div>
+                        <div class="col-2"><input id="units1" name="units1" type="text" class="form-control" ></div>
                         <div class="col-2 d-flex justify-content-end"><button id="delete1" type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-trigger="click"
                             title="You must have at least one ingredient" onclick="deleteIngredient(1)">Delete Ingredient</button></div>
                     </div><br></div>
                     <div><div class="row">
                         <div class="col"><input id="ingredient2" name="ingredient2" type="text" class="form-control" required></div>
-                        <div class="col-1"><input id="quantity2" name="quantity2" type="number" class="form-control" required></div>
-                        <div class="col-2"><input id="units2" name="units2" type="text" class="form-control" required></div>
+                        <div class="col-1"><input id="quantity2" name="quantity2" type="number"  step = ".01" class="form-control" required></div>
+                        <div class="col-2"><input id="units2" name="units2" type="text" class="form-control" ></div>
                         <div class="col-2 d-flex justify-content-end"><button id="delete2" type="button" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-trigger="click"
                             title="You must have at least one ingredient" onclick="deleteIngredient(2)">Delete Ingredient</button></div>
                     </div><br></div>
